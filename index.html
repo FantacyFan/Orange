@@ -20,13 +20,21 @@
 
 <body>
   <!-- set threshold -->
-  <input id="threshold" type="range" min="20" max="200" step="10" value="50" onchange="update()">
+  <input id="threshold" type="range" min="20" max="250" step="40" value="50" onchange="update()">
+  <div class="firms">
+    <ul class="firmList">
+    </ul>
+  </div>
 </body>
 
 <script>
   var threshold = document.getElementById("threshold").value;
-  var width = window.innerWidth;
-  var height = window.innerHeight;
+  // var width = window.innerWidth;
+  // var height = window.innerHeight;
+
+  var width = 800;
+  var height = 600;
+
 
   var svg = d3.select("body")
         .append("svg")
@@ -37,18 +45,20 @@
   var force = d3.layout.force()
                 .linkStrength(0.1)
                 .friction(0.9)
-                .linkDistance(150)
-                .charge(-200)
+                .linkDistance(120)
+                .charge(-100)
                 .gravity(0.1)
                 .theta(0.8)
                 .alpha(0.1)
                 .size([width, height]);
+
   //init lots of array node to store VCs' name
   var getData,
       tempData = new Array(),
       nodes = new Array(),
       edges = new Array(),
       numGetter = [];
+      combinationGetter = [];
       init();
 
   //load json data file
@@ -83,7 +93,12 @@ function init(){
         "number":d.number
       }
       numGetter.push(tempObj2);
+      var tempObj3 = {
+        "combinations": d.combinations
+      }
+      combinationGetter.push(tempObj3);
     });
+    // console.log(combinationGetter);
 
     var tempLength = tempData.length;
 
@@ -94,7 +109,9 @@ function init(){
     force
         .nodes(nodes)
         .links(edges)
-        .start();                    
+        .start(); 
+
+
     //add nodes   
     var link = svg.selectAll(".link")
           .data(edges)
@@ -104,6 +121,8 @@ function init(){
           .style("stroke-width", function(d) { 
             return Math.sqrt(d.value);
           });
+
+
 
     var svg_nodes = svg.selectAll("circle")
             .attr("class","nodeCircle")
@@ -116,7 +135,24 @@ function init(){
             .style("fill",function(d,i){
               return color(i);
             })
-            .call(force.drag);
+            .call(force.drag)
+            .on("click", function(d){
+              var combinationsLenght = combinationGetter[d.index].combinations.length;
+
+
+              var tempComb = '';
+              var node = combinationGetter[d.index];
+
+
+              for(var i=0; i<combinationsLenght; i++){
+                  tempComb += node.combinations[i].title + ',' + node.combinations[i].date + ',' + node.combinations[i].round + ',' + node.combinations[i].domain + ',' 
+                    + node.combinations[i].amount + '\n';
+              }
+
+              
+              d3.select(".firms").text(tempComb)
+              // console.log(combinationsLenght);
+            });
   
 
     //add text to each node
@@ -149,7 +185,10 @@ function init(){
                 .attr("y",function(d){
                   return d.y;
                 })
-    });        
+    });   
+
+
+
 
   });
 }
