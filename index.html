@@ -21,10 +21,12 @@
 <body>
   <!-- set threshold -->
   <input id="threshold" type="range" min="20" max="250" step="40" value="50" onchange="update()">
+  <div class="bubbles"></div>
   <div class="firms">
     <ul class="firmList">
     </ul>
   </div>
+  <div class="linechart"></div>
 </body>
 
 <script>
@@ -36,7 +38,7 @@
   var height = 600;
 
 
-  var svg = d3.select("body")
+  var svg = d3.select(".bubbles")
         .append("svg")
         .attr("width",width)
         .attr("height",height);
@@ -117,7 +119,10 @@ function init(){
           .data(edges)
           .enter().append("line")
           .attr("class", "link")
-          .style("stroke","rgba(218,212,162,0.1)")
+          .style("stroke",
+            // "rgba(218,212,162,0.1)"
+            "rgba(211,211,211,0.1)"
+          )
           .style("stroke-width", function(d) { 
             return Math.sqrt(d.value);
           });
@@ -132,8 +137,16 @@ function init(){
             .attr("r",function(d){
               return  Math.sqrt(numGetter[d.index].number);
             })
-            .style("fill",function(d,i){
-              return color(i);
+            .style("fill",
+              // function(d,i){
+              // return color(i);}
+              "rgba(198, 141, 141, 0.7)"
+            )
+            .on("mouseover", function(d) {
+              d3.select(this).style("fill", "rgb(169, 99, 99)");
+            }) 
+            .on("mouseout", function(d) {
+              d3.select(this).style("fill", "rgba(198, 141, 141, 0.7)");
             })
             .call(force.drag)
             .on("click", function(d){
@@ -162,7 +175,7 @@ function init(){
             .enter()
             .append("text")
             .attr("font-size","0.5em")
-            .style("fill", "black")
+            .style("fill", "rgb(128, 99, 99)")
             .attr("dx", 20)
             .attr("dy", 8)
             // .text("New paragraph!");
@@ -185,9 +198,18 @@ function init(){
                 .attr("y",function(d){
                   return d.y;
                 })
-    });   
+    });  
 
 
+
+
+
+
+    // draw line chart
+    
+
+    // Set the dimensions of the canvas / graph
+   
 
 
   });
@@ -248,7 +270,10 @@ function update(){
           .data(edges)
           .enter().append("line")
           .attr("class", "link")
-          .style("stroke","rgba(218,212,162,0.1)")
+          .style("stroke",
+            // "rgba(218,212,162,0.1)"
+            "rgba(211,211,211,0.1)"
+          )
           .style("stroke-width", function(d) { 
             return Math.sqrt(d.value);
           });
@@ -261,8 +286,17 @@ function update(){
             .attr("r",function(d){
               return  Math.sqrt(numGetter[d.index].number);
             })
-            .style("fill",function(d,i){
-              return color(i);
+            .style("fill",
+              // function(d,i){
+              // return color(i);
+              // }
+              "rgba(198, 141, 141, 0.7)"
+            )
+            .on("mouseover", function(d) {
+              d3.select(this).style("fill", "rgb(169, 99, 99)");
+            }) 
+            .on("mouseout", function(d) {
+              d3.select(this).style("fill", "rgba(198, 141, 141, 0.7)");
             })
             .call(force.drag);
   
@@ -274,7 +308,7 @@ function update(){
             .append("text")
             .attr("class","vcName")
             .attr("font-size","0.5em")
-            .style("fill", "black")
+            .style("fill", "rgb(128, 99, 99)")
             .attr("dx", 20)
             .attr("dy", 8)
             // .text("New paragraph!");
