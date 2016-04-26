@@ -31,20 +31,59 @@
       tempData = new Array(),
       nodes = new Array(),
       edges = new Array(),
-      numGetter = [];
+      numGetter = [],
       combinationGetter = [];
       init();
 
   //load json data file
 function init(){
     d3.json("orange.json", function(error, data) {
-    //error checking
     if(error){
       console.log(error);
+    }else{
+      // save the data load from json into getData
+      getData = data;
+      
+      updateData();
+      edges = createEdges(tempData.length);
+      
+
+      drawForce(edges,nodes);    
+
+
+
+
+      // draw line chart
+      
+
+      // Set the dimensions of the canvas / graph
+     
+
     }
-    // save the data load from json into getData
-    getData = data;
-    getData.forEach(function(d,i){
+    
+  });
+}
+
+// update, triggered by input
+$scope.update =function(){
+  // clear the screen and data arraies
+  d3.selectAll("line").remove();
+  d3.selectAll("text").remove();
+  d3.selectAll("circle").remove();
+  tempData = [],
+      nodes = [],
+      edges = [],
+      numGetter = [];
+
+    updateData();  
+    edges = createEdges(tempData.length);
+    
+    drawForce(edges,nodes);         
+          
+}  
+
+function updateData(){
+ getData.forEach(function(d,i){
       //only consider VCs whose invest times larger than threshold
       var combinations = d.combinations;
       var num = combinations.length;
@@ -72,152 +111,10 @@ function init(){
       }
       combinationGetter.push(tempObj3);
     });
-    // console.log(combinationGetter);
-
-    var tempLength = tempData.length;
-
-    edges = createEdges(tempLength);
-    
-    var color = d3.scale.category20();
-
-    force
-        .nodes(nodes)
-        .links(edges)
-        .start(); 
-
-
-    //add nodes   
-    var link = svg.selectAll(".link")
-          .data(edges)
-          .enter().append("line")
-          .attr("class", "link")
-          .style("stroke",
-            // "rgba(218,212,162,0.1)"
-            "rgba(211,211,211,0.1)"
-          )
-          .style("stroke-width", function(d) { 
-            return Math.sqrt(d.value);
-          });
-
-
-
-    var svg_nodes = svg.selectAll("circle")
-            .attr("class","nodeCircle")
-            .data(nodes)
-            .enter()
-            .append("circle")
-            .attr("r",function(d){
-              return  Math.sqrt(numGetter[d.index].number);
-            })
-            .style("fill",
-              // function(d,i){
-              // return color(i);}
-              "rgba(198, 141, 141, 0.7)"
-            )
-            .on("mouseover", function(d) {
-              d3.select(this).style("fill", "rgb(169, 99, 99)");
-            }) 
-            .on("mouseout", function(d) {
-              d3.select(this).style("fill", "rgba(198, 141, 141, 0.7)");
-            })
-            .call(force.drag)
-            .on("click", function(d){
-              $scope.combinations = combinationGetter[d.index].combinations;
-              $scope.$apply();
-              // console.log($scope.combinations);
-            });
-
-    //add text to each node
-    var svg_texts = svg.selectAll("text")
-            .attr("class","vcName")
-            .data(nodes)
-            .enter()
-            .append("text")
-            .attr("font-size","0.5em")
-            .style("fill", "rgb(128, 99, 99)")
-            .attr("dx", 20)
-            .attr("dy", 8)
-            // .text("New paragraph!");
-            .text(function(d){
-              return d.name;
-            });        
-
-    force.on("tick", function() {
-      link.attr("x1", function(d) { return d.source.x; })
-          .attr("y1", function(d) { return d.source.y; })
-          .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
-
-      svg_nodes.attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; });
-
-      svg_texts.attr("x",function(d){
-                  return d.x;
-                })
-                .attr("y",function(d){
-                  return d.y;
-                })
-    });  
-
-
-
-
-
-
-    // draw line chart
-    
-
-    // Set the dimensions of the canvas / graph
-   
-
-
-  });
 }
 
-// update, triggered by input
-$scope.update =function(){
-  // clear the screen and data arraies
-  console.log("update");
-  d3.selectAll("line").remove();
-  d3.selectAll("text").remove();
-  d3.selectAll("circle").remove();
-  tempData = [],
-      nodes = [],
-      edges = [],
-      numGetter = [];
- 
-  // update nodes, edges and numGetter
-    getData.forEach(function(d,i){
-      //only consider VCs whose invest times larger than 3
-      var combinations = d.combinations;
-      var num = combinations.length;
-      if(num > $scope.threshold){
-        var tempObj ={
-          "name":d.name,
-          "combinations":d.combinations,
-          "number":d.number
-        }
-        tempData.push(tempObj);
-      }
-    });
-
-    tempData.forEach(function(d){
-      var tempObj ={
-        "name":d.name
-      }
-      nodes.push(tempObj);
-      var tempObj2 ={
-        "number":d.number
-      }
-      numGetter.push(tempObj2);
-    });
-
-    var tempLength = tempData.length;
-    edges = createEdges(tempLength);
-    
-    var color = d3.scale.category20();
-
-    force
+function drawForce(edges,nodes){
+  force
         .nodes(nodes)
         .links(edges)
         .start();                    
@@ -276,7 +173,11 @@ $scope.update =function(){
               return d.name;
             });        
 
-    force.on("tick", function() {
+    forceOn(link,svg_nodes,svg_texts);   
+}
+
+function forceOn(link,svg_nodes,svg_texts){
+   force.on("tick", function() {
       link.attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
@@ -291,9 +192,8 @@ $scope.update =function(){
                 .attr("y",function(d){
                   return d.y;
                 })
-    });        
-
-}  
+    });  
+}
 
 function createEdges(_length){
     var tempLength = _length;

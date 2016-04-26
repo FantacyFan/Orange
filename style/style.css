@@ -1,24 +1,24 @@
-  ul, li{
-    list-style: none;
-  }
-  .circle{
-    z-index: 100;
-  }
-  .line{
-    z-index: -100;
-  }
-  #threshold{
-    position:fixed;
-    left:10;
-    top:10;
-  }
-  .bubbles{
-    display: inline-block;
-  }
+ul, li {
+  list-style: none; }
 
-  .firms{
-    display:inline-block;
-    width:400px;
-    height:600px;
-    overflow: scroll;
-  }
+.circle {
+  z-index: 100; }
+
+.line {
+  z-index: -100; }
+
+#threshold {
+  position: fixed;
+  left: 10;
+  top: 10; }
+
+.bubbles {
+  display: inline-block; }
+
+.firms {
+  display: inline-block;
+  width: 400px;
+  height: 600px;
+  overflow: scroll; }
+
+/*# sourceMappingURL=style.css.map */
