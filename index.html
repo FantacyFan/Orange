@@ -4,43 +4,43 @@
 <meta charset="utf-8"> 
 <title>Data Visualization</title>
 <link rel="stylesheet" href="style/style.css">
+<link rel="stylesheet" href="style/Grid.css">
 <script type="text/javascript" src="js/angular.min.js" ></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-
 <script src="js/app.js"></script>
 
 </head>
 
 <body ng-controller="myCtrl">
-  <input id="threshold" type="range" min="20" max="250" step="40" ng-model="threshold"  ng-change="update()">
-  <div class="bubbles"></div>
-  <div class="firms">
-  <!-- {{combinations.length}} -->
-  	<ul ng-if="combinations">
-  		<li>
-    		<strong>
-    		<span>Title</span>
-    		<span>Date</span>
-    		<span>Round</span>
-    		<span>Domain</span>
-    		<span>Amount</span>
-    		</strong>
-    	</li>
-  	</ul>
-    <ul class="firmList" ng-repeat="combination in combinations">
-    	<li>
-    		<span>{{combination.title}}</span>
-    		<span>{{combination.date}}</span>
-    		<span>{{combination.round}}</span>
-    		<span>{{combination.domain}}</span>
-    		<span>{{combination.amount}}</span>
-    	</li>
-    </ul>
-  </div>
-  <div class="linechart">
+  <div class="container">
+    <input id="threshold" type="range" min="20" max="250" step="40" ng-model="threshold"  ng-change="update()">
+    <div class="bubbles"></div>
+    <div class="firms">
+    	<ul ng-if="combinations">
+    		<li>
+      		<strong>
+      		<span>Title</span>
+      		<span>Date</span>
+      		<span>Round</span>
+      		<span>Domain</span>
+      		<span>Amount</span>
+      		</strong>
+      	</li>
+    	</ul>
+      <ul class="firmList" ng-repeat="combination in combinations">
+      	<li>
+      		<span>{{combination.title}}</span>
+      		<span>{{combination.date}}</span>
+      		<span>{{combination.round}}</span>
+      		<span>{{combination.domain}}</span>
+      		<span>{{combination.amount}}</span>
+      	</li>
+      </ul>
+    </div>
+    <div class="linechart">
+    </div>
   </div>
 </body>
 
-<!-- <script type="text/javascript" src="js/firstgraph.js"></script> -->
 
 </html>

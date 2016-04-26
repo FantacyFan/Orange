@@ -1,0 +1,233 @@
+$numOfCol:12;
+$gap:20px;
+$containerWidth:100%;
+
+$break-medium: "only screen and (min-width: 768px)";
+
+@mixin margin-top($marginTop){
+  margin-top:$marginTop;
+}
+@mixin margin-bottom($marginBottom){
+  margin-bottom:$marginBottom;
+}
+
+@mixin border-box{
+  box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -ms-box-sizing:border-box;
+  -o-box-sizing:border-box;
+}
+
+@mixin addPadding{
+  padding-right:$gap/2;
+  padding-left:$gap/2;
+}
+
+input {
+  border: none;
+  text-align: start !important;
+ }
+
+textarea {
+  resize: none;
+  text-align: start !important;
+}
+
+html {
+  font-family: Roboto,sans-serif;
+}  
+
+%clearFix{
+  *zoom:1;
+  &:before,
+  &:after{
+    content:" ";
+    display:table;
+  }
+  &:after{
+    clear:both;
+  }
+}
+*{
+  border-collapse:collapse;
+}
+*,
+*:before,
+*:after{
+  margin:0;
+  padding:0;
+  @include border-box;
+}
+
+*,
+*:hover,
+*:active,
+*:focus{
+  outline:none;
+}
+
+a{
+  text-decoration: none;
+}
+
+.container{
+  width:$containerWidth;
+  margin:0 auto;
+ // @include addPadding;
+}
+
+/*.row{
+  margin-left:-$gap/2;
+  margin-right:-$gap/2;
+}*/
+
+.container,
+.row{
+  @extend %clearFix;
+}
+
+[class*='col-']{
+  @include addPadding;
+  position:relative;
+  float:left;
+  width:100%;
+  min-height:1px;
+  display:inline-block;
+  text-align:center;
+}
+.nav > .logo {
+  float: left;
+  margin-left: 20px; }
+
+.nav-fixed {
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: all 1.3s ease;
+  -webkit-transition: all 1.3s ease;
+  -moz-transition: all 1.3s ease;
+  -ms-transition: all 1.3s ease;
+  -o-transition: all 1.3s ease; }
+
+.nav-toggle {
+  display: block;
+  float: right;
+  width: 30px;
+  height: 100%;
+  color: #FFF;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px; }
+
+.sm-screen {
+  display: none;
+  margin-top: 40px; }
+
+.sm-screen li {
+  background: #333;
+  display: list-item;
+  text-align: center; }
+
+.sm-screen li > a {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 1px solid #FFF;
+  text-transform: uppercase;
+  cursor: pointer; }
+
+.sm-screen li > a:hover {
+  background: #555; }
+
+.bg-screen {
+  display: none; }
+
+a:hover {
+  cursor: pointer; }
+
+.img{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+.circle{
+  border-radius:50%;
+  overflow:hidden;
+}
+.img-wrapper{
+  width:300px;
+  height:300px;
+  margin:0 auto;
+ // @include margin-top(20px);
+ // @include margin-bottom(20px);
+  border:5px solid #E3E3E3;
+}
+
+.text-standout {
+  font-size: 80px;
+  font-weight: bold; }
+.block{
+  display:block!important;
+}
+@media #{$break-medium}{
+  .container{
+    width:100%;
+  }
+  .sm-screen, .nav-toggle {
+      display: none !important;
+    }
+
+    .bg-screen {
+      display: block;
+    }
+
+
+    .nav {
+      list-style: none;
+      width: 100%;
+    }
+
+    .nav > ul {
+      float: right;
+  }
+
+    .nav > ul > li {
+      display: inline;
+      float: left;
+      height: 100%;
+      line-height: 100%;
+      position: relative;
+      display: block;
+  }
+
+    .nav > ul > li > a {
+      height: 100%;
+      vertical-align: center;
+      text-decoration: none;
+      text-align: center;
+      /*font-weight:bold;*/
+      display: table-cell;
+      text-transform: uppercase;
+      position: relative;
+      padding: 0 20px;
+    }
+  
+  @for $i from 1 through $numOfCol {
+    .col-#{$i}{
+      width:($containerWidth )/$numOfCol*$i; 
+    }
+    .col-offset-#{$i}{
+      margin-left:($containerWidth )/$numOfCol*$i; 
+    }
+    .col-push-#{$i}{
+      left:($containerWidth )/$numOfCol*$i;
+    }
+    .col-pull-#{$i}{
+      right:($containerWidth )/$numOfCol*$i;
+    }
+  }
+}
+
