@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<script src="//d3js.org/d3.v3.min.js"></script>
+<head>
+  <style>
+
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  </style>
+</head>
+<body>
+  <button onclick="update()">update</button>
+</body>
+
+<script>
+
+var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    width = 1000 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+var y = d3.scale.linear().range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+    // .tickFormat(d3.time.format("%Y-%m"));
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+var getData;
+var tempData = [];
+
+var allCombinations = [];
+var roundFreqData = [];
+
+d3.json("orange.json", function(error, data) {
+    //error checking
+    if(error){
+      console.log(error);
+    }
+
+  getData = data;
+
+  getData.forEach(function(d){
+    d.combinations.forEach(function(combination){
+      allCombinations.push(combination);
+    });
+  });
+
+
+  var test1 = allCombinations.filter(function(d){
+    return d.domain ==="文化娱乐体育";
+  });
+
+  roundFreqData=getFreq(allCombinations);
+
+  draw(roundFreqData);
+
+});
+
+function init(){
+
+}
+
+function draw(data){
+  x.domain(data.map(function(d) { 
+    return d.roundName;
+  }));
+
+  y.domain([0, d3.max(data, function(d) { 
+    return d.frequency;
+  })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("class","frequency")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
+
+  svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { 
+        return x(d.roundName); 
+      })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { 
+        return y(d.frequency); 
+      })
+      .attr("height", function(d) { return height - y(d.frequency); });
+
+}
+
+function getFreq(data){
+  var result=[];
+  var category = {
+    "种子轮": 0,
+    "天使轮":0,
+    "Pre-A轮":0,
+    "A轮":0,
+    "A+轮":0,
+    "Pre-B轮":0,
+    "B轮":0,
+    "B+轮":0,
+    "C轮":0,
+    "D轮":0,
+    "E轮":0,
+    "F轮-上市前":0,
+    "IPO上市":0,
+    "IPO上市后":0,
+    "新三板":0,
+    "战略投资":0,
+    "不明确":0,
+    "并购":0
+  };
+  
+
+  for(var i=0; i<data.length; i++){
+    if(data[i].round.indexOf("并购") > -1){
+      data[i].round="并购";
+    }
+    category[data[i].round]++;
+  }
+
+
+  for(key in category){
+    var tempObj={
+      "roundName":key,
+      "frequency":category[key]
+    }
+    result.push(tempObj);
+  }
+  return result;
+}
+
+function update(){
+  d3.selectAll(".bar").remove();
+  d3.selectAll(".axis").remove();
+  console.log("update");
+  var newCombination = [];
+  newCombination = allCombinations.filter(function(d){
+    return d.domain ==="企业服务";
+  });
+  roundFreqData=getFreq(newCombination);
+  draw(roundFreqData);
+}
+
+</script>
+</html>
