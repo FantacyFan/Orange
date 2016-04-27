@@ -4,21 +4,61 @@ ul, li {
 .circle {
   z-index: 100; }
 
+.header h1{
+  font-size: 1.5em;
+  color: rgb(126, 125, 125);
+  margin: 30px 0px;
+}
+
 .line {
   z-index: -100; }
 
 #threshold {
-  position: fixed;
+  width: 300px;
   left: 10;
   top: 10; }
 
 .bubbles {
-  display: inline-block; }
+  display: inline-block; 
+  padding: 20px;
+}
+
 
 .firms {
   display: inline-block;
   width: 400px;
-  height: 600px;
-  overflow: scroll; }
+  height: 500px;
+  padding: 20px;
+}
+
+.firms .firmTitle{
+  border-bottom: 1px solid rgb(126, 125, 125);
+}
+
+.firms ul li{
+    text-align: left;
+}
+
+.firms ul li span{
+  font-size: 0.6em;
+  padding:5px;
+  display: inline-block;
+  width: 18%;
+}
+
+.firmList{
+  height: 500px;
+  overflow: scroll; 
+}
+
+.firmList li{
+  color: rgb(126, 125, 125);
+}
+
+.firmList li:hover{
+  background-color: rgb(169, 99, 99);
+  color:rgb(255, 255, 255);
+}
+
 
 /*# sourceMappingURL=style.css.map */

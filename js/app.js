@@ -6,8 +6,8 @@
     // var width = window.innerWidth;
     // var height = window.innerHeight;
 
-    var width = 800;
-    var height = 600;
+    var width = 600;
+    var height = 500;
 
 
     var svg = d3.select(".bubbles")
@@ -20,10 +20,10 @@
                   .linkStrength(0.1)
                   .friction(0.9)
                   .linkDistance(120)
-                  .charge(-100)
-                  .gravity(0.1)
-                  .theta(0.8)
-                  .alpha(0.1)
+                  .charge(-150)
+                  .gravity(0.05)
+                  .theta(0.2)
+                  .alpha(0.8)
                   .size([width, height]);
 
     //init lots of array node to store VCs' name
