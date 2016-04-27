@@ -13,29 +13,42 @@
 
 <body ng-controller="myCtrl">
   <div class="container">
-    <input id="threshold" type="range" min="20" max="250" step="40" ng-model="threshold"  ng-change="update()">
-    <div class="bubbles"></div>
-    <div class="firms">
-    	<ul ng-if="combinations">
-    		<li>
-      		<strong>
-      		<span>Title</span>
-      		<span>Date</span>
-      		<span>Round</span>
-      		<span>Domain</span>
-      		<span>Amount</span>
-      		</strong>
-      	</li>
-    	</ul>
-      <ul class="firmList" ng-repeat="combination in combinations">
-      	<li>
-      		<span>{{combination.title}}</span>
-      		<span>{{combination.date}}</span>
-      		<span>{{combination.round}}</span>
-      		<span>{{combination.domain}}</span>
-      		<span>{{combination.amount}}</span>
-      	</li>
-      </ul>
+    <div class="row">
+      <div class="col-10 col-offset-1">
+        <div class="header">
+          <h1>创投行业关系及布局分析</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bubbles col-7">
+        <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
+      </div>
+
+    
+      <div class="firms col-5">
+      	<ul class="firmTitle" ng-if="combinations">
+      		<li>
+        		<strong>
+        		<span>被投公司</span>
+        		<span>投资时间</span>
+        		<span>投资轮次</span>
+        		<span>投资领域</span>
+        		<span>投资金额</span>
+        		</strong>
+        	</li>
+      	</ul>
+        <ul class="firmList">
+        	<li ng-repeat="combination in combinations">
+        		<span>{{combination.title}}</span>
+        		<span>{{combination.date}}</span>
+        		<span>{{combination.round}}</span>
+        		<span>{{combination.domain}}</span>
+        		<span>{{combination.amount}}</span>
+        	</li>
+        </ul>
+      </div>
+
     </div>
     <div class="linechart">
     </div>
