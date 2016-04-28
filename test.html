@@ -24,14 +24,14 @@
 
 <script>
 
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 1000 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
+    barWidth = 1000 - barMargin.left - barMargin.right,
+    barHeight = 300 - barMargin.top - barMargin.bottom;
 
 
-var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+var x = d3.scale.ordinal().rangeRoundBands([0, barWidth], .05);
 
-var y = d3.scale.linear().range([height, 0]);
+var y = d3.scale.linear().range([barHeight, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -43,12 +43,12 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .ticks(10);
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+var svgBar = d3.select("body").append("svg")
+    .attr("width", barWidth + barMargin.left + barMargin.right)
+    .attr("height", barHeight + barMargin.top + barMargin.bottom)
+    .append("g")
     .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+          "translate(" + barMargin.left + "," + barMargin.top + ")");
 
 
 var getData;
@@ -95,12 +95,12 @@ function draw(data){
     return d.frequency;
   })]);
 
-  svg.append("g")
+  svgBar.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + barHeight + ")")
       .call(xAxis);
 
-  svg.append("g")
+  svgBar.append("g")
       .attr("class", "y axis")
       .call(yAxis)
       .append("text")
@@ -111,7 +111,7 @@ function draw(data){
       .style("text-anchor", "end")
       .text("Frequency");
 
-  svg.selectAll(".bar")
+  svgBar.selectAll(".bar")
       .data(data)
       .enter().append("rect")
       .attr("class", "bar")
@@ -122,7 +122,7 @@ function draw(data){
       .attr("y", function(d) { 
         return y(d.frequency); 
       })
-      .attr("height", function(d) { return height - y(d.frequency); });
+      .attr("height", function(d) { return barHeight - y(d.frequency); });
 
 }
 

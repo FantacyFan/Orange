@@ -4,61 +4,53 @@ ul, li {
 .circle {
   z-index: 100; }
 
-.header h1{
-  font-size: 1.5em;
-  color: rgb(126, 125, 125);
-  margin: 30px 0px;
-}
-
 .line {
   z-index: -100; }
 
 #threshold {
-  width: 300px;
   left: 10;
   top: 10; }
 
-.bubbles {
-  display: inline-block; 
-  padding: 20px;
-}
+.header h1 {
+  font-size: 1.5em;
+  color: #7e7d7d;
+  margin: 30px 0px; }
 
+.bubbles {
+  display: inline-block; }
 
 .firms {
   display: inline-block;
   width: 400px;
+  height: 600px;
+  overflow: scroll; }
+  .firms ul li {
+    text-align: left; }
+    .firms ul li span {
+      font-size: 0.6em;
+      padding: 5px;
+      display: inline-block;
+      width: 18%; }
+
+.firmList {
   height: 500px;
-  padding: 20px;
-}
+  overflow: scroll; }
+  .firmList li {
+    color: #7e7d7d; }
+    .firmList li:hover {
+      background-color: #a96363;
+      color: white; }
 
-.firms .firmTitle{
-  border-bottom: 1px solid rgb(126, 125, 125);
-}
+.axis {
+  font: 10px sans-serif; }
 
-.firms ul li{
-    text-align: left;
-}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges; }
 
-.firms ul li span{
-  font-size: 0.6em;
-  padding:5px;
-  display: inline-block;
-  width: 18%;
-}
-
-.firmList{
-  height: 500px;
-  overflow: scroll; 
-}
-
-.firmList li{
-  color: rgb(126, 125, 125);
-}
-
-.firmList li:hover{
-  background-color: rgb(169, 99, 99);
-  color:rgb(255, 255, 255);
-}
-
+.nodeCircle:hover {
+  cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */

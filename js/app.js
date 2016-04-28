@@ -5,6 +5,33 @@
   	$scope.threshold=50;
     // var width = window.innerWidth;
     // var height = window.innerHeight;
+    var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
+        barWidth = 1000 - barMargin.left - barMargin.right,
+        barHeight = 300 - barMargin.top - barMargin.bottom;
+
+
+    var x = d3.scale.ordinal().rangeRoundBands([0, barWidth], .05);
+
+    var y = d3.scale.linear().range([barHeight, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+        // .tickFormat(d3.time.format("%Y-%m"));
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(10);
+
+    var svgBar = d3.select("body").append("svg")
+        .attr("width", barWidth + barMargin.left + barMargin.right)
+        .attr("height", barHeight + barMargin.top + barMargin.bottom)
+        .append("g")
+        .attr("transform", 
+              "translate(" + barMargin.left + "," + barMargin.top + ")");
+
+
 
     var width = 600;
     var height = 500;
@@ -35,6 +62,9 @@
         combinationGetter = [];
         init();
 
+    var allCombinations = [];
+    var roundFreqData = [];
+
     //load json data file
     function init(){
       d3.json("orange.json", function(error, data) {
@@ -43,7 +73,13 @@
       }else{
         // save the data load from json into getData
         getData = data;
-
+        getData.forEach(function(d){
+          d.combinations.forEach(function(combination){
+            allCombinations.push(combination);
+          });
+        });
+        roundFreqData=getFreq(allCombinations);
+        draw(roundFreqData);
         updateData();
         edges = createEdges(tempData.length);
         
@@ -233,5 +269,99 @@
           }
       return edges;
     }
+
+function draw(data){
+  x.domain(data.map(function(d) { 
+    return d.roundName;
+  }));
+
+  y.domain([0, d3.max(data, function(d) { 
+    return d.frequency;
+  })]);
+
+  svgBar.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + barHeight + ")")
+      .call(xAxis);
+
+  svgBar.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("class","frequency")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
+
+  svgBar.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { 
+        return x(d.roundName); 
+      })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { 
+        return y(d.frequency); 
+      })
+      .attr("height", function(d) { return barHeight - y(d.frequency); });
+
+}
+
+function getFreq(data){
+  var result=[];
+  var category = {
+    "种子轮": 0,
+    "天使轮":0,
+    "Pre-A轮":0,
+    "A轮":0,
+    "A+轮":0,
+    "Pre-B轮":0,
+    "B轮":0,
+    "B+轮":0,
+    "C轮":0,
+    "D轮":0,
+    "E轮":0,
+    "F轮-上市前":0,
+    "IPO上市":0,
+    "IPO上市后":0,
+    "新三板":0,
+    "战略投资":0,
+    "不明确":0,
+    "并购":0
+  };
+  
+
+  for(var i=0; i<data.length; i++){
+    if(data[i].round.indexOf("并购") > -1){
+      data[i].round="并购";
+    }
+    category[data[i].round]++;
+  }
+
+
+  for(key in category){
+    var tempObj={
+      "roundName":key,
+      "frequency":category[key]
+    }
+    result.push(tempObj);
+  }
+  return result;
+}
+
+function updateBar(){
+  d3.selectAll(".bar").remove();
+  d3.selectAll(".axis").remove();
+  console.log("update");
+  var newCombination = [];
+  newCombination = allCombinations.filter(function(d){
+    return d.domain ==="企业服务";
+  });
+  roundFreqData=getFreq(newCombination);
+  draw(roundFreqData);
+}
   }]);
 }());

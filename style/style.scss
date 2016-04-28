@@ -8,10 +8,16 @@
     z-index: -100;
   }
   #threshold{
-    position:fixed;
+
     left:10;
     top:10;
   }
+  .header h1{
+    font-size: 1.5em;
+    color: rgb(126, 125, 125);
+    margin: 30px 0px;
+  }
+
   .bubbles{
     display: inline-block;
   }
@@ -21,4 +27,41 @@
     width:400px;
     height:600px;
     overflow: scroll;
+    ul li{
+      text-align: left;
+      span{
+        font-size: 0.6em;
+        padding:5px;
+        display: inline-block;
+        width: 18%;
+      }
+    }
+  }
+
+  .firmList{
+    height: 500px;
+    overflow: scroll; 
+    li{
+      color: rgb(126, 125, 125);
+      &:hover{
+        background-color: rgb(169, 99, 99);
+        color:rgb(255, 255, 255);
+      }
+    }
+  }
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .nodeCircle{
+    &:hover{
+      cursor: pointer;
+    }
   }
