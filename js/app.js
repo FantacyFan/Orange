@@ -3,8 +3,9 @@
 
   myApp.controller('myCtrl', ['$scope',function($scope) {
   	$scope.threshold=50;
-    // var width = window.innerWidth;
-    // var height = window.innerHeight;
+    $scope.selectOption =[];
+    $scope.selectDomain;
+
     var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
         barWidth = document.getElementById("barChart").offsetWidth - barMargin.left - barMargin.right,
         barHeight = 300 - barMargin.top - barMargin.bottom;
@@ -59,7 +60,7 @@
         edges = [],
         numGetter = [],
         combinationGetter = [];
-
+    var domains;
 
     var allCombinations = [];
     var roundFreqData = [];
@@ -107,7 +108,7 @@
           year.push(Number(d.year));
           domain.push(d.domain);
         });
-       
+
         var counts = {};
         var domainCounts = {};
 
@@ -123,14 +124,22 @@
               domainCounts[tempDomain] = domainCounts[tempDomain] ? domainCounts[tempDomain]+1 : 1;
             }
         }
-          for(var y in year) {
-              frequency[year[y]]=(frequency[year[y]] || 0)+1; // increment frequency.
-              if(frequency[year[y]] > maxCount) { // is this frequency > max so far ?
-                      maxCount = frequency[year[y]];  // update max.
-                      // result = year[y];          // update result.
-              }
+        // console.log(domainCounts);
+        for(var y in year) {
+            frequency[year[y]]=(frequency[year[y]] || 0)+1; // increment frequency.
+            if(frequency[year[y]] > maxCount) { // is this frequency > max so far ?
+                    maxCount = frequency[year[y]];  // update max.
+                    // result = year[y];          // update result.
+            }
         }
-
+        domains = Object.keys(domainCounts);
+        domains.forEach(function(d){
+          var tempObj ={
+            "name":d
+          }
+          $scope.selectOption.push(tempObj);
+        })
+        console.log($scope.selectOption);
         var domainLength = Object.keys(domainCounts).length;
         // console.log(domainLength);
         allCombinations.forEach(function(d) {
@@ -178,6 +187,10 @@
         
         drawForce(edges,nodes);         
             
+    }
+    $scope.updateCombination = function(){
+      console.log($scope.selectDomain);
+      updateBar();
     }  
 
     function updateData(){
@@ -370,6 +383,7 @@ function drawBar(data){
 
 function getFreq(data){
   var result=[];
+
   var category = {
     "种子轮": 0,
     "天使轮":0,
@@ -390,14 +404,15 @@ function getFreq(data){
     "不明确":0,
     "并购":0
   };
-  
-
+  console.log(category);
+  console.log(data.length);
   for(var i=0; i<data.length; i++){
     if(data[i].round.indexOf("并购") > -1){
       data[i].round="并购";
     }
     category[data[i].round]++;
   }
+  console.log(category);
 
 
   for(key in category){
@@ -415,14 +430,14 @@ function updateBar(){
   d3.selectAll(".axis").remove();
   var newCombination = [];
   newCombination = allCombinations.filter(function(d){
-    return d.domain ==="企业服务";
+    return d.domain ===$scope.selectDomain;
   });
   roundFreqData=getFreq(newCombination);
-  draw(roundFreqData);
+  console.log(roundFreqData);
+  drawBar(roundFreqData);``
 }
 
 function drawLine(year,maxCount,domainLength){
-      console.log(maxCount) ;
   var xScale = d3.scale.linear()
         .range([margins.left, width - margins.right])
         .domain(d3.extent(year)),
@@ -470,7 +485,9 @@ function drawLine(year,maxCount,domainLength){
           .attr('fill', 'none');
 }
 
+function filterDomain(data){
 
+}
 
   }]);
 }());
