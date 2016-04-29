@@ -93,27 +93,15 @@
         });
 
 
-        var year = [],
-            count = [],
-            domain = [];
-
-        var frequency = {};  // array of frequency.
-        var maxCount = 0;  // holds the max frequency.
-
         // draw bar chart
         $scope.getData.forEach(function(d){
           d.combinations.forEach(function(combination){
+            combination.year = combination.date.substring(0,4);
             allCombinations.push(combination);
           });
         });
 
 
-        // for linechart
-        allCombinations.forEach(function(d) {
-          d.year = d.date.substring(0, 4);
-          year.push(Number(d.year));
-          domain.push(d.domain);
-        });
 
         // console.log(allCombinations);
 
@@ -122,56 +110,18 @@
         }).key(function(d){
           return d.year;
         }).entries(allCombinations);
-        console.log(filterDomain);
-        var domainKey = Object.keys(filterDomain);
-        // console.log(domainKey);
+
         var filterYear = d3.nest().key(function(d){
           return d.year;
         }).entries(allCombinations);
-        // console.log(filterYear);
-        var yearKey = Object.keys(filterYear);
-        // console.log(yearKey);
 
-        var counts = {};
-        var domainCounts = {};
-
-        for(var i = 0; i< year.length; i++) {
-            var num = year[i];
-            counts[num] = counts[num] ? counts[num]+1 : 1;
-        }
-
-
-        for(var i = 0; i< domain.length; i++) {
-            var tempDomain = domain[i];
-            if(tempDomain){
-              domainCounts[tempDomain] = domainCounts[tempDomain] ? domainCounts[tempDomain]+1 : 1;
-            }
-        }
-        // console.log(domainCounts);
-        for(var y in year) {
-            frequency[year[y]]=(frequency[year[y]] || 0)+1; // increment frequency.
-            if(frequency[year[y]] > maxCount) { // is this frequency > max so far ?
-                    maxCount = frequency[year[y]];  // update max.
-                    // result = year[y];          // update result.
-            }
-        }
-        domains = Object.keys(domainCounts);
-        domains.forEach(function(d){
+        filterDomain.forEach(function(d){
           var tempObj ={
-            "name":d
+            "name":d.key
           }
           $scope.selectOption.push(tempObj);
         })
 
-        var domainLength = Object.keys(domainCounts).length;
-        allCombinations.forEach(function(d) {
-          d.count = counts[d.year];
-          d.year = Number(d.year);
-        });
-
-        allCombinations.sort(function(a,b) {
-          return d3.ascending(a.year, b.year);
-        });    
 
         roundFreqData=getFreq(allCombinations);
         drawBar(roundFreqData);
@@ -182,7 +132,7 @@
         drawForce(edges,nodes);    
 
         // draw line chart
-        drawLine(filterDomain,year,maxCount,domainLength)  ;   
+        drawLine(filterYear,filterDomain)  ;   
 
       }
       
@@ -207,7 +157,7 @@
             
     }
     $scope.updateCombination = function(){
-      console.log($scope.selectDomain);
+      // console.log($scope.selectDomain);
       updateBar();
       d3.selectAll(".frequencyLine").attr("stroke","rgba(0,0,0,0.4")
       d3.select("#"+$scope.selectDomain).attr("stroke","red");
@@ -453,18 +403,35 @@ function updateBar(){
     return d.domain ===$scope.selectDomain;
   });
   roundFreqData=getFreq(newCombination);
-  console.log(roundFreqData);
-  drawBar(roundFreqData);``
+  // console.log(roundFreqData);
+  drawBar(roundFreqData);
 }
 
-function drawLine(filterDomain,year,maxCount,domainLength){
+function drawLine(filterYear,filterDomain){
+ 
+  var currentYear=[];
+  var year = [],
+      count = [];
+  filterYear.forEach(function(d){
+      var tempObj ={
+        "year":Number(d.key),
+        "count":d.values.length
+      }
+      // for base line
+      currentYear.push(tempObj);
+      // for x, y axis
+      year.push(Number(d.key));
+      count.push(d.values.length)
+  });
+
+  var domainLength = filterDomain.length;
   var xScale = d3.scale.linear()
         .range([margins.left, width - margins.right])
         .domain(d3.extent(year)),
 
       yScale = d3.scale.pow().exponent(.3)
         .range([height - margins.top, margins.bottom])
-        .domain([0,(maxCount/domainLength)*3]),
+        .domain([0,(d3.extent(count)[1]/domainLength)*3]),
 
       xAxis = d3.svg.axis()
         .scale(xScale),
@@ -483,42 +450,36 @@ function drawLine(filterDomain,year,maxCount,domainLength){
           .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
           .call(yAxis);
 
-
-    console.log(filterDomain);
-    console.log(filterDomain.length);
-
-
-      var lineGen = d3.svg.line()
+     var lineGen = d3.svg.line()
           .x(function(d) {
             return xScale(d.year);
           })
           .y(function(d) {
-            // console.log(d.count/domainLength);
-            return yScale(d.count/domainLength);
+            return yScale(d.count/filterDomain.length);
           });
-
+      
+      // draw base line, average of all domains.
       vis.append('svg:path')
-          .attr('d', lineGen(allCombinations))
+          .attr("class","all")
+          .attr('d', lineGen(currentYear))
           .attr('stroke', 'green')
           .attr('stroke-width', 1)
           .attr('fill', 'none');
 
 
+     // draw lines for all domains
       filterDomain.forEach(function(d){
         var currentDomain = [];
         d.values.forEach(function(d){
-          // console.log(d.key);
-          // console.log(d.values);
           var tempObj ={
             "year":d.key,
             "count":d.values.length*domainLength
           }
           currentDomain.push(tempObj);
         })
-        // console.log(d.key);
+
         vis.append('svg:path')
             .attr("id",function(){
-                console.log(d.key);
                 return d.key;
             })
             .attr("class","frequencyLine")
