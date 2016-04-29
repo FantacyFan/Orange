@@ -4,8 +4,9 @@
   myApp.controller('myCtrl', ['$scope',function($scope) {
   	$scope.threshold=50;
     $scope.selectOption =[];
-    $scope.selectDomain;
+    $scope.selectDomain="all";
     $scope.getData =[];
+    $scope.barData =[];
 
     var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
         barWidth = document.getElementById("barChart").offsetWidth - barMargin.left - barMargin.right,
@@ -102,7 +103,7 @@
         });
 
 
-
+        $scope.combinations = allCombinations;
         // console.log(allCombinations);
 
         var filterDomain = d3.nest().key(function(d){
@@ -234,7 +235,9 @@
                 $scope.combinations = combinationGetter[d.index].combinations;
                 $scope.$apply();
                // not finshed yet
-                // filterVC();
+                filterVC();
+                roundFreqData = getFreq($scope.combinations);
+                drawBar(roundFreqData);
               });
 
 
@@ -314,6 +317,8 @@
     }
 
 function drawBar(data){
+  d3.selectAll(".bar").remove();
+  d3.selectAll(".axis").remove();
   x.domain(data.map(function(d) { 
     return d.roundName;
   }));
@@ -399,7 +404,9 @@ function updateBar(){
   d3.selectAll(".bar").remove();
   d3.selectAll(".axis").remove();
   var newCombination = [];
-  newCombination = allCombinations.filter(function(d){
+  // console.log($scope.combinations);
+  // console.log(allCombinations);
+  newCombination = $scope.combinations.filter(function(d){
     return d.domain ===$scope.selectDomain;
   });
   roundFreqData=getFreq(newCombination);
@@ -429,7 +436,7 @@ function drawLine(filterYear,filterDomain){
         .range([margins.left, width - margins.right])
         .domain(d3.extent(year)),
 
-      yScale = d3.scale.pow().exponent(.3)
+      yScale = d3.scale.pow().exponent(.2)
         .range([height - margins.top, margins.bottom])
         .domain([0,(d3.extent(count)[1]/domainLength)*3]),
 
@@ -451,6 +458,7 @@ function drawLine(filterYear,filterDomain){
           .call(yAxis);
 
      var lineGen = d3.svg.line()
+          .interpolate("basis")
           .x(function(d) {
             return xScale(d.year);
           })
@@ -463,7 +471,7 @@ function drawLine(filterYear,filterDomain){
           .attr("class","all")
           .attr('d', lineGen(currentYear))
           .attr('stroke', 'green')
-          .attr('stroke-width', 1)
+          .attr('stroke-width', 2)
           .attr('fill', 'none');
 
 
@@ -484,37 +492,33 @@ function drawLine(filterYear,filterDomain){
             })
             .attr("class","frequencyLine")
             .attr('d',lineGen(currentDomain))
-            .attr('stroke', 'rgba(0,0,0,0.4)')
-            .attr('stroke-width', 1)
+            .attr('stroke', 'rgba(0,0,0,0.1)')
+            .attr('stroke-width', 2)
             .attr('fill', 'none')
             .on("mouseover",function(){
               d3.select(this).attr("stroke","red");
             })
             .on("mouseout", function(){
-              d3.select(this).attr('stroke', 'rgba(0,0,0,0.4)');
+              d3.select(this).attr('stroke', 'rgba(0,0,0,0.1)');
             });
       })    
 }
 
-function filterDomain(data){
-
-}
 
 function filterVC(){
+  console.log($scope.combinations);
+  document.getElementById('visualisation').innerHTML ="";
   filterDomain = d3.nest().key(function(d){
                     return d.domain;
                   }).key(function(d){
                     return d.year;
                   }).entries( $scope.combinations);
-        console.log(filterDomain);
-        // var domainKey = Object.keys(filterDomain);
-        // console.log(domainKey);
-        filterYear = d3.nest().key(function(d){
+
+  filterYear = d3.nest().key(function(d){
           return d.year;
         }).entries( $scope.combinations);
-        console.log(filterYear);
-        // var yearKey = Object.keys(filterYear);
-        drawLine(filterDomain,year,maxCount,domainLength);
+
+        drawLine(filterYear,filterDomain);
 }
 
   }]);
