@@ -5,6 +5,7 @@
   	$scope.threshold=50;
     $scope.selectOption =[];
     $scope.selectDomain;
+    $scope.getData =[];
 
     var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
         barWidth = document.getElementById("barChart").offsetWidth - barMargin.left - barMargin.right,
@@ -54,8 +55,7 @@
                   .size([width, height]);
 
     //init lots of array node to store VCs' name
-    var getData,
-        tempData = [],
+    var tempData = [],
         nodes = [],
         edges = [],
         numGetter = [],
@@ -86,8 +86,13 @@
       if(error){
         console.log(error);
       }else{
-        // save the data load from json into getData
-        getData = data;
+        // save the data load from json into $scope.getData
+        // console.log(data);
+        $scope.getData = data.filter(function(d){
+          return d.number!="0";
+        });
+
+
         var year = [],
             count = [],
             domain = [];
@@ -96,11 +101,12 @@
         var maxCount = 0;  // holds the max frequency.
 
         // draw bar chart
-        getData.forEach(function(d){
+        $scope.getData.forEach(function(d){
           d.combinations.forEach(function(combination){
             allCombinations.push(combination);
           });
         });
+
 
         // for linechart
         allCombinations.forEach(function(d) {
@@ -108,6 +114,23 @@
           year.push(Number(d.year));
           domain.push(d.domain);
         });
+
+        // console.log(allCombinations);
+
+        var filterDomain = d3.nest().key(function(d){
+          return d.domain;
+        }).key(function(d){
+          return d.year;
+        }).entries(allCombinations);
+        console.log(filterDomain);
+        var domainKey = Object.keys(filterDomain);
+        // console.log(domainKey);
+        var filterYear = d3.nest().key(function(d){
+          return d.year;
+        }).entries(allCombinations);
+        // console.log(filterYear);
+        var yearKey = Object.keys(filterYear);
+        // console.log(yearKey);
 
         var counts = {};
         var domainCounts = {};
@@ -139,9 +162,8 @@
           }
           $scope.selectOption.push(tempObj);
         })
-        console.log($scope.selectOption);
+
         var domainLength = Object.keys(domainCounts).length;
-        // console.log(domainLength);
         allCombinations.forEach(function(d) {
           d.count = counts[d.year];
           d.year = Number(d.year);
@@ -149,22 +171,18 @@
 
         allCombinations.sort(function(a,b) {
           return d3.ascending(a.year, b.year);
-        });        
+        });    
+
         roundFreqData=getFreq(allCombinations);
         drawBar(roundFreqData);
         
         // draw force graph
         updateData();
         edges = createEdges(tempData.length);
-        
-
         drawForce(edges,nodes);    
 
-
-
-
         // draw line chart
-        drawLine(year,maxCount,domainLength)  ;   
+        drawLine(filterDomain,year,maxCount,domainLength)  ;   
 
       }
       
@@ -191,10 +209,12 @@
     $scope.updateCombination = function(){
       console.log($scope.selectDomain);
       updateBar();
+      d3.selectAll(".frequencyLine").attr("stroke","rgba(0,0,0,0.4")
+      d3.select("#"+$scope.selectDomain).attr("stroke","red");
     }  
 
     function updateData(){
-      getData.forEach(function(d,i){
+      $scope.getData.forEach(function(d,i){
           //only consider VCs whose invest times larger than threshold
           var combinations = d.combinations;
           var num = combinations.length;
@@ -263,6 +283,8 @@
               .on("click", function(d){
                 $scope.combinations = combinationGetter[d.index].combinations;
                 $scope.$apply();
+               // not finshed yet
+                // filterVC();
               });
 
 
@@ -404,15 +426,13 @@ function getFreq(data){
     "不明确":0,
     "并购":0
   };
-  console.log(category);
-  console.log(data.length);
+
   for(var i=0; i<data.length; i++){
     if(data[i].round.indexOf("并购") > -1){
       data[i].round="并购";
     }
     category[data[i].round]++;
   }
-  console.log(category);
 
 
   for(key in category){
@@ -437,14 +457,14 @@ function updateBar(){
   drawBar(roundFreqData);``
 }
 
-function drawLine(year,maxCount,domainLength){
+function drawLine(filterDomain,year,maxCount,domainLength){
   var xScale = d3.scale.linear()
         .range([margins.left, width - margins.right])
         .domain(d3.extent(year)),
 
-      yScale = d3.scale.linear()
+      yScale = d3.scale.pow().exponent(.3)
         .range([height - margins.top, margins.bottom])
-        .domain([0,(maxCount/domainLength)*1.5]),
+        .domain([0,(maxCount/domainLength)*3]),
 
       xAxis = d3.svg.axis()
         .scale(xScale),
@@ -463,11 +483,10 @@ function drawLine(year,maxCount,domainLength){
           .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
           .call(yAxis);
 
-    //   allCombinations.forEach(function(d) {
-    //   if (d.domain == id) {
-    //     filterCombinations.push(d);
-    //   }
-    // });
+
+    console.log(filterDomain);
+    console.log(filterDomain.length);
+
 
       var lineGen = d3.svg.line()
           .x(function(d) {
@@ -483,10 +502,58 @@ function drawLine(year,maxCount,domainLength){
           .attr('stroke', 'green')
           .attr('stroke-width', 1)
           .attr('fill', 'none');
+
+
+      filterDomain.forEach(function(d){
+        var currentDomain = [];
+        d.values.forEach(function(d){
+          // console.log(d.key);
+          // console.log(d.values);
+          var tempObj ={
+            "year":d.key,
+            "count":d.values.length*domainLength
+          }
+          currentDomain.push(tempObj);
+        })
+        // console.log(d.key);
+        vis.append('svg:path')
+            .attr("id",function(){
+                console.log(d.key);
+                return d.key;
+            })
+            .attr("class","frequencyLine")
+            .attr('d',lineGen(currentDomain))
+            .attr('stroke', 'rgba(0,0,0,0.4)')
+            .attr('stroke-width', 1)
+            .attr('fill', 'none')
+            .on("mouseover",function(){
+              d3.select(this).attr("stroke","red");
+            })
+            .on("mouseout", function(){
+              d3.select(this).attr('stroke', 'rgba(0,0,0,0.4)');
+            });
+      })    
 }
 
 function filterDomain(data){
 
+}
+
+function filterVC(){
+  filterDomain = d3.nest().key(function(d){
+                    return d.domain;
+                  }).key(function(d){
+                    return d.year;
+                  }).entries( $scope.combinations);
+        console.log(filterDomain);
+        // var domainKey = Object.keys(filterDomain);
+        // console.log(domainKey);
+        filterYear = d3.nest().key(function(d){
+          return d.year;
+        }).entries( $scope.combinations);
+        console.log(filterYear);
+        // var yearKey = Object.keys(filterYear);
+        drawLine(filterDomain,year,maxCount,domainLength);
 }
 
   }]);
