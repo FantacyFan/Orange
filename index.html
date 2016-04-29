@@ -57,6 +57,12 @@
     <section>
       <div class="row">
         <div class="col-12">
+          <select name="domainSelect" id="domainSelect" ng-model="selectDomain" ng-change="updateCombination()">
+            <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
+          </select>
+          {{selectDomain}}
+        </div>
+        <div class="col-12">
           <div id="lineChart">
             <svg id="visualisation" width="1000" height="600"></svg>
           </div>
