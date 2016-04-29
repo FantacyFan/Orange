@@ -36,7 +36,7 @@
 
 
     var width =document.getElementById("bubbles").offsetWidth;
-    var height = 500;
+    var height = 600;
 
 
     var svg = d3.select("#bubbles")
@@ -207,7 +207,7 @@
             .attr("class", "link")
             .style("stroke",
               // "rgba(218,212,162,0.1)"
-              "rgba(211,211,211,0.1)"
+              "rgba(231,231,231,0.1)"
             )
             .style("stroke-width", function(d) { 
               return Math.sqrt(d.value);
@@ -222,13 +222,13 @@
                 return  Math.sqrt(numGetter[d.index].number);
               })
               .style("fill",
-                "rgba(198, 141, 141, 0.7)"
+                "rgba(174, 202, 237, 0.5)"
               )
               .on("mouseover", function(d) {
-                d3.select(this).style("fill", "rgb(169, 99, 99)");
+                d3.select(this).style("fill", "rgba(64, 101, 148, 0.9)");
               }) 
               .on("mouseout", function(d) {
-                d3.select(this).style("fill", "rgba(198, 141, 141, 0.7)");
+                d3.select(this).style("fill", "rgba(174, 202, 237, 0.5)");
               })
               .call(force.drag)
               .on("click", function(d){
@@ -248,7 +248,7 @@
               .append("text")
               .attr("class","vcName")
               .attr("font-size","0.5em")
-              .style("fill", "rgb(128, 99, 99)")
+              .style("fill", "rgba(183, 217, 255, 0.6)")
               .attr("dx", 20)
               .attr("dy", 8)
               .text(function(d){
