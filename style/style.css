@@ -1,3 +1,7 @@
+body{
+  background-color: rgb(33, 52, 76);
+}
+
 ul, li {
   list-style: none; }
 
@@ -16,7 +20,7 @@ svg {
 
 .header h1 {
   font-size: 1.5em;
-  color: #7e7d7d;
+  color: rgb(174, 202, 237);
   margin: 30px 0px; }
 
 #firms {
