@@ -6,7 +6,7 @@
     // var width = window.innerWidth;
     // var height = window.innerHeight;
     var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
-        barWidth = 1000 - barMargin.left - barMargin.right,
+        barWidth = document.getElementById("barChart").offsetWidth - barMargin.left - barMargin.right,
         barHeight = 300 - barMargin.top - barMargin.bottom;
 
 
@@ -17,14 +17,13 @@
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
-        // .tickFormat(d3.time.format("%Y-%m"));
 
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
         .ticks(10);
 
-    var svgBar = d3.select("body").append("svg")
+    var svgBar = d3.select("#barChart").append("svg")
         .attr("width", barWidth + barMargin.left + barMargin.right)
         .attr("height", barHeight + barMargin.top + barMargin.bottom)
         .append("g")
@@ -33,11 +32,11 @@
 
 
 
-    var width = 600;
+    var width =document.getElementById("bubbles").offsetWidth;
     var height = 500;
 
 
-    var svg = d3.select(".bubbles")
+    var svg = d3.select("#bubbles")
           .append("svg")
           .attr("width",width)
           .attr("height",height);
@@ -60,10 +59,25 @@
         edges = [],
         numGetter = [],
         combinationGetter = [];
-        init();
+
 
     var allCombinations = [];
     var roundFreqData = [];
+
+    var vis = d3.select("#visualisation"),
+        width = 1000,
+        height = 500,
+        margins = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+        };
+
+    var filterCombinations = [];
+
+    init();
+
 
     //load json data file
     function init(){
@@ -73,13 +87,64 @@
       }else{
         // save the data load from json into getData
         getData = data;
+        var year = [],
+            count = [],
+            domain = [];
+
+        var frequency = {};  // array of frequency.
+        var maxCount = 0;  // holds the max frequency.
+
+        // draw bar chart
         getData.forEach(function(d){
           d.combinations.forEach(function(combination){
             allCombinations.push(combination);
           });
         });
+
+        // for linechart
+        allCombinations.forEach(function(d) {
+          d.year = d.date.substring(0, 4);
+          year.push(Number(d.year));
+          domain.push(d.domain);
+        });
+       
+        var counts = {};
+        var domainCounts = {};
+
+        for(var i = 0; i< year.length; i++) {
+            var num = year[i];
+            counts[num] = counts[num] ? counts[num]+1 : 1;
+        }
+
+
+        for(var i = 0; i< domain.length; i++) {
+            var tempDomain = domain[i];
+            if(tempDomain){
+              domainCounts[tempDomain] = domainCounts[tempDomain] ? domainCounts[tempDomain]+1 : 1;
+            }
+        }
+          for(var y in year) {
+              frequency[year[y]]=(frequency[year[y]] || 0)+1; // increment frequency.
+              if(frequency[year[y]] > maxCount) { // is this frequency > max so far ?
+                      maxCount = frequency[year[y]];  // update max.
+                      // result = year[y];          // update result.
+              }
+        }
+
+        var domainLength = Object.keys(domainCounts).length;
+        // console.log(domainLength);
+        allCombinations.forEach(function(d) {
+          d.count = counts[d.year];
+          d.year = Number(d.year);
+        });
+
+        allCombinations.sort(function(a,b) {
+          return d3.ascending(a.year, b.year);
+        });        
         roundFreqData=getFreq(allCombinations);
-        draw(roundFreqData);
+        drawBar(roundFreqData);
+        
+        // draw force graph
         updateData();
         edges = createEdges(tempData.length);
         
@@ -90,10 +155,7 @@
 
 
         // draw line chart
-        
-
-        // Set the dimensions of the canvas / graph
-       
+        drawLine(year,maxCount,domainLength)  ;   
 
       }
       
@@ -103,9 +165,9 @@
     // update, triggered by input
     $scope.update =function(){
       // clear the screen and data arraies
-      d3.selectAll("line").remove();
-      d3.selectAll("text").remove();
-      d3.selectAll("circle").remove();
+      d3.selectAll(".link").remove();
+      d3.selectAll(".vcName").remove();
+      d3.selectAll(".nodeCircle").remove();
       tempData = [],
           nodes = [],
           edges = [],
@@ -154,7 +216,7 @@
           .nodes(nodes)
           .links(edges)
           .start();                    
-      //add nodes   
+
       var link = svg.selectAll(".link")
             .data(edges)
             .enter().append("line")
@@ -176,9 +238,6 @@
                 return  Math.sqrt(numGetter[d.index].number);
               })
               .style("fill",
-                // function(d,i){
-                // return color(i);
-                // }
                 "rgba(198, 141, 141, 0.7)"
               )
               .on("mouseover", function(d) {
@@ -204,7 +263,6 @@
               .style("fill", "rgb(128, 99, 99)")
               .attr("dx", 20)
               .attr("dy", 8)
-              // .text("New paragraph!");
               .text(function(d){
                 return d.name;
               });        
@@ -270,7 +328,7 @@
       return edges;
     }
 
-function draw(data){
+function drawBar(data){
   x.domain(data.map(function(d) { 
     return d.roundName;
   }));
@@ -355,7 +413,6 @@ function getFreq(data){
 function updateBar(){
   d3.selectAll(".bar").remove();
   d3.selectAll(".axis").remove();
-  console.log("update");
   var newCombination = [];
   newCombination = allCombinations.filter(function(d){
     return d.domain ==="企业服务";
@@ -363,5 +420,57 @@ function updateBar(){
   roundFreqData=getFreq(newCombination);
   draw(roundFreqData);
 }
+
+function drawLine(year,maxCount,domainLength){
+      console.log(maxCount) ;
+  var xScale = d3.scale.linear()
+        .range([margins.left, width - margins.right])
+        .domain(d3.extent(year)),
+
+      yScale = d3.scale.linear()
+        .range([height - margins.top, margins.bottom])
+        .domain([0,(maxCount/domainLength)*1.5]),
+
+      xAxis = d3.svg.axis()
+        .scale(xScale),
+  
+      yAxis = d3.svg.axis()
+          .scale(yScale)
+          .orient("left");
+
+      vis.append("svg:g")
+          .attr("transform", "translate(0," + (height - margins.bottom) + ")")
+          .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+          .call(xAxis);
+
+      vis.append("svg:g")
+          .attr("transform", "translate(" + (margins.left) + ",0)")
+          .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+          .call(yAxis);
+
+    //   allCombinations.forEach(function(d) {
+    //   if (d.domain == id) {
+    //     filterCombinations.push(d);
+    //   }
+    // });
+
+      var lineGen = d3.svg.line()
+          .x(function(d) {
+            return xScale(d.year);
+          })
+          .y(function(d) {
+            // console.log(d.count/domainLength);
+            return yScale(d.count/domainLength);
+          });
+
+      vis.append('svg:path')
+          .attr('d', lineGen(allCombinations))
+          .attr('stroke', 'green')
+          .attr('stroke-width', 1)
+          .attr('fill', 'none');
+}
+
+
+
   }]);
 }());

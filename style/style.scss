@@ -1,6 +1,10 @@
   ul, li{
     list-style: none;
   }
+
+  svg{
+    display: block;
+  }
   .circle{
     z-index: 100;
   }
@@ -18,13 +22,7 @@
     margin: 30px 0px;
   }
 
-  .bubbles{
-    display: inline-block;
-  }
-
-  .firms{
-    display:inline-block;
-    width:400px;
+  #firms{
     height:600px;
     overflow: scroll;
     ul li{
@@ -36,6 +34,10 @@
         width: 18%;
       }
     }
+  }
+
+  #lineChart{
+
   }
 
   .firmList{

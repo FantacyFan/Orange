@@ -1,6 +1,9 @@
 ul, li {
   list-style: none; }
 
+svg {
+  display: block; }
+
 .circle {
   z-index: 100; }
 
@@ -16,17 +19,12 @@ ul, li {
   color: #7e7d7d;
   margin: 30px 0px; }
 
-.bubbles {
-  display: inline-block; }
-
-.firms {
-  display: inline-block;
-  width: 400px;
+#firms {
   height: 600px;
   overflow: scroll; }
-  .firms ul li {
+  #firms ul li {
     text-align: left; }
-    .firms ul li span {
+    #firms ul li span {
       font-size: 0.6em;
       padding: 5px;
       display: inline-block;
