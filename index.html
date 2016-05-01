@@ -27,6 +27,10 @@
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
         </div>
         <div class="col-6" id="firms">
+          <div ng-if="!flag">
+            <img src="img/1.jpg" alt="">
+          </div>
+          <div ng-if="flag">
         	<ul class="firmTitle" ng-if="combinations">
         		<li>
           		<strong>
@@ -47,6 +51,7 @@
           		<span>{{combination.amount}}</span>
           	</li>
           </ul>
+          </div>
         </div>
 
       </div>
@@ -56,15 +61,18 @@
     <section>
       <div class="row">
         <div class="col-12">
-          <select name="domainSelect" id="domainSelect" ng-model="selectDomain" ng-change="updateCombination()">
+          <select name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
+            <option value="all">All</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
           </select>
-          {{selectDomain}}
+
         </div>
         <div class="col-12">
-          <div id="lineChart">
-            <svg id="lineVisu" width="1000" height="400"></svg>
-          </div>
+            <h1 id="selection">{{selectDomain}}</h1>
+            <div id="lineChart">
+              <svg id="lineVisu" width="1000" height="400"></svg>
+            </div>
+        </div>
         </div>
         <div class="col-12">
           <div id="barChart">

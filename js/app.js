@@ -7,6 +7,7 @@
     $scope.selectDomain="all";
     $scope.getData =[];
     $scope.barData =[];
+    $scope.flag=false;
 
     // var width =document.getElementById("bubbles").offsetWidth;
     var width=700;
@@ -53,7 +54,6 @@
 
     init();
 
-
     //load json data file
     function init(){
       d3.json("orange.json", function(error, data) {
@@ -85,14 +85,23 @@
 
         var filterYear = d3.nest().key(function(d){
           return d.year;
+        }).key(function(d){
+          return d.domain;
         }).entries(allCombinations);
 
+        
         filterDomain.forEach(function(d){
           var tempObj ={
             "name":d.key
           }
           $scope.selectOption.push(tempObj);
         })
+        $scope.$apply();
+        // console.log($scope.selectTure);
+        // $scope.selectTure=true;
+        // console.log($scope.selectTure);
+        // console.log($scope.selectOption);
+
 
 
         roundFreqData=getFreq(allCombinations);
@@ -131,8 +140,8 @@
 
     $scope.updateCombination = function(){
       updateBar();
-      d3.selectAll(".frequencyLine").attr("stroke","rgba(255,255,255,0.1)")
-      d3.select("#"+$scope.selectDomain).attr("stroke","red");
+      d3.selectAll(".frequencyLine").attr("stroke","rgba(19,198,254,0.2)")
+      d3.select("#"+$scope.selectDomain).attr("stroke","rgba(245,225,96,1)");
     }  
 
     function updateData(){
@@ -202,13 +211,14 @@
                 "rgba(174, 202, 237, 0.5)"
               )
               .on("mouseover", function(d) {
-                d3.select(this).style("fill", "rgba(64, 101, 148, 0.9)");
+                d3.select(this).style("fill", "rgba(3,242,180,0.8)");
               }) 
               .on("mouseout", function(d) {
                 d3.select(this).style("fill", "rgba(174, 202, 237, 0.5)");
               })
               .call(force.drag)
               .on("click", function(d){
+                $scope.flag=true;
                 $scope.combinations = combinationGetter[d.index].combinations;
                 $scope.$apply();
                // not finshed yet
@@ -400,8 +410,6 @@ function getFreq(data){
 
 function updateBar(){
   document.getElementById("barVisu").innerHTML="";
-  d3.selectAll(".bar").remove();
-  d3.selectAll(".axis").remove();
   var newCombination = [];
   newCombination = $scope.combinations.filter(function(d){
     return d.domain ===$scope.selectDomain;
@@ -411,30 +419,45 @@ function updateBar(){
 }
 
 function drawLine(filterYear,filterDomain){
- 
+  
+  // console.log(filterYear);
   var currentYear=[];
   var year = [],
       count = [];
+  // filterYear.forEach(function(d){
+  //     var tempObj ={
+  //       "year":Number(d.key),
+  //       "count":d.values.length
+  //     }
+  //     // for base line
+  //     currentYear.push(tempObj);
+  //     // for x, y axis
+  //     year.push(Number(d.key));
+  //     count.push(d.values.length)
+  // });
   filterYear.forEach(function(d){
-      var tempObj ={
-        "year":Number(d.key),
-        "count":d.values.length
-      }
-      // for base line
-      currentYear.push(tempObj);
-      // for x, y axis
-      year.push(Number(d.key));
-      count.push(d.values.length)
-  });
+    var num = 0;
+    d.values.forEach(function(value){
+      num += value.values.length;
+    });
+    var tempObj ={
+      "year":Number(d.key),
+      "count":num/d.values.length
+    }
+    currentYear.push(tempObj);
+    year.push(Number(d.key));
+    count.push(num);
+  });  
 
   var domainLength = filterDomain.length;
+  // console.log(d3.extent(count));
   var xScale = d3.scale.linear()
         .range([margin.left, chartWidth - margin.right])
         .domain(d3.extent(year)),
 
       yScale = d3.scale.pow().exponent(.2)
         .range([chartHeight - margin.top, margin.bottom])
-        .domain([0,(d3.extent(count)[1]/domainLength)*3]),
+        .domain([0,(d3.extent(count)[1])/domainLength*2]),
 
       xAxis = d3.svg.axis()
         .scale(xScale),
@@ -447,14 +470,12 @@ function drawLine(filterYear,filterDomain){
           .attr("class","line")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + (chartHeight - margin.bottom) + ")")
-          // .style({ 'stroke': 'rgb(174, 202, 237)', 'stroke-width': '2px'})
           .call(xAxis);
 
       vis.append("svg:g")
           .attr("class","line")
           .attr("class", "y axis")
           .attr("transform", "translate(" + (margin.left) + ",0)")
-          // .style({ 'stroke': 'rgb(174, 202, 237)', 'stroke-width': '2px'})
           .call(yAxis);
 
      var lineGen = d3.svg.line()
@@ -463,7 +484,7 @@ function drawLine(filterYear,filterDomain){
             return xScale(d.year);
           })
           .y(function(d) {
-            return yScale(d.count/filterDomain.length);
+            return yScale(d.count);
           });
       
       // draw base line, average of all domains.
@@ -481,7 +502,7 @@ function drawLine(filterYear,filterDomain){
         d.values.forEach(function(d){
           var tempObj ={
             "year":d.key,
-            "count":d.values.length*domainLength
+            "count":d.values.length
           }
           currentDomain.push(tempObj);
         })
@@ -516,7 +537,9 @@ function filterVC(){
 
   filterYear = d3.nest().key(function(d){
           return d.year;
-        }).entries( $scope.combinations);
+        }).key(function(d){
+          return d.domain;
+        }).entries($scope.combinations);
 
   drawLine(filterYear,filterDomain);
 }

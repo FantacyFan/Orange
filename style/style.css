@@ -52,7 +52,10 @@ svg {
   font-size: 1.2em;
   color:rgb(174, 202, 237);
 }
-
+#selection{
+  color:rgba(245,225,96,1);
+  margin-top:1em;
+}
 .axis {
   font: 10px sans-serif; }
 
@@ -75,10 +78,7 @@ svg {
   margin: 0 auto;
 }
 
-/*.line{
-  stroke: rgb(174, 202, 237);
-  stroke-width: 1px;
-}
+
 */
 .tick{
   font-size: 1.2em;
@@ -89,15 +89,6 @@ svg {
   stroke-width: 1px;
 }
 
-     
-/*  .x.axis line {
-     stroke: green;
-     stroke-width: 1.0;
-  }
-    
-  .x.axis path {
-    display: none;
-  }*/
 
   .x.axis line, .x.axis path {
      fill: none;
