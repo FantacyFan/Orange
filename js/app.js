@@ -10,7 +10,7 @@
 
     // var width =document.getElementById("bubbles").offsetWidth;
     var width=700;
-    var height = 400;
+    var height = 600;
 
 
     var svg = d3.select("#bubbles")
@@ -131,7 +131,7 @@
 
     $scope.updateCombination = function(){
       updateBar();
-      d3.selectAll(".frequencyLine").attr("stroke","rgba(0,0,0,0.4")
+      d3.selectAll(".frequencyLine").attr("stroke","rgba(255,255,255,0.1)")
       d3.select("#"+$scope.selectDomain).attr("stroke","red");
     }  
 
@@ -322,7 +322,7 @@ function drawBar(data){
 
   bar.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + barHeight + ")")
+      .attr("transform", "translate(0," + (barHeight+1) + ")")
       .call(xAxis);
 
   bar.append("g")
@@ -334,12 +334,18 @@ function drawBar(data){
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Frequency");
+      .text("次数");
 
   bar.selectAll(".bar")
       .data(data)
       .enter().append("rect")
-      .attr("class", "bar")
+      .attr("class", "bar").attr("fill","#03f2b4")
+      .on("mouseover", function(d) {
+                d3.select(this).style("fill", "#fef161");
+              }) 
+      .on("mouseout", function(d) {
+        d3.select(this).style("fill", "#03f2b4");
+      })
       .attr("x", function(d) { 
         return x(d.roundName); 
       })
@@ -438,13 +444,17 @@ function drawLine(filterYear,filterDomain){
           .orient("left");
 
       vis.append("svg:g")
+          .attr("class","line")
+          .attr("class", "x axis")
           .attr("transform", "translate(0," + (chartHeight - margin.bottom) + ")")
-          .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+          // .style({ 'stroke': 'rgb(174, 202, 237)', 'stroke-width': '2px'})
           .call(xAxis);
 
       vis.append("svg:g")
+          .attr("class","line")
+          .attr("class", "y axis")
           .attr("transform", "translate(" + (margin.left) + ",0)")
-          .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+          // .style({ 'stroke': 'rgb(174, 202, 237)', 'stroke-width': '2px'})
           .call(yAxis);
 
      var lineGen = d3.svg.line()
@@ -460,8 +470,8 @@ function drawLine(filterYear,filterDomain){
       vis.append('svg:path')
           .attr("class","all")
           .attr('d', lineGen(currentYear))
-          .attr('stroke', 'green')
-          .attr('stroke-width', 2)
+          .attr('stroke', 'rgba(94,225,142,1)')
+          .attr('stroke-width', 2.5)
           .attr('fill', 'none');
 
 
@@ -482,14 +492,14 @@ function drawLine(filterYear,filterDomain){
             })
             .attr("class","frequencyLine")
             .attr('d',lineGen(currentDomain))
-            .attr('stroke', 'rgba(0,0,0,0.1)')
-            .attr('stroke-width', 2)
+            .attr('stroke', 'rgba(19,198,254,0.2)')
+            .attr('stroke-width', 2.5)
             .attr('fill', 'none')
             .on("mouseover",function(){
-              d3.select(this).attr("stroke","red");
+              d3.select(this).attr("stroke","rgba(245,225,96,1)");
             })
             .on("mouseout", function(){
-              d3.select(this).attr('stroke', 'rgba(0,0,0,0.1)');
+              d3.select(this).attr('stroke', 'rgba(19,198,254,0.2)');
             });
       })    
 }

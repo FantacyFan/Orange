@@ -23,10 +23,10 @@
     <section>
       <div class="row">
         
-        <div class="col-7" id="bubbles">
+        <div class="col-6" id="bubbles">
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
         </div>
-        <div class="col-5" id="firms">
+        <div class="col-6" id="firms">
         	<ul class="firmTitle" ng-if="combinations">
         		<li>
           		<strong>
@@ -63,12 +63,12 @@
         </div>
         <div class="col-12">
           <div id="lineChart">
-            <svg id="lineVisu" width="700" height="400"></svg>
+            <svg id="lineVisu" width="1000" height="400"></svg>
           </div>
         </div>
         <div class="col-12">
           <div id="barChart">
-            <svg id="barVisu" width="700" height="400"></svg>
+            <svg id="barVisu" width="1000" height="400"></svg>
           </div>
         </div>
       </div>
