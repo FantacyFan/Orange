@@ -2,41 +2,15 @@
   var myApp = angular.module('myApp', []);
 
   myApp.controller('myCtrl', ['$scope',function($scope) {
-  	$scope.threshold=50;
+  	$scope.threshold=80;
     $scope.selectOption =[];
     $scope.selectDomain="all";
     $scope.getData =[];
     $scope.barData =[];
 
-    var barMargin = {top: 20, right: 20, bottom: 70, left: 40},
-        barWidth = document.getElementById("barChart").offsetWidth - barMargin.left - barMargin.right,
-        barHeight = 300 - barMargin.top - barMargin.bottom;
-
-
-    var x = d3.scale.ordinal().rangeRoundBands([0, barWidth], .05);
-
-    var y = d3.scale.linear().range([barHeight, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(10);
-
-    var svgBar = d3.select("#barChart").append("svg")
-        .attr("width", barWidth + barMargin.left + barMargin.right)
-        .attr("height", barHeight + barMargin.top + barMargin.bottom)
-        .append("g")
-        .attr("transform", 
-              "translate(" + barMargin.left + "," + barMargin.top + ")");
-
-
-
-    var width =document.getElementById("bubbles").offsetWidth;
-    var height = 600;
+    // var width =document.getElementById("bubbles").offsetWidth;
+    var width=700;
+    var height = 400;
 
 
     var svg = d3.select("#bubbles")
@@ -55,6 +29,15 @@
                   .alpha(0.8)
                   .size([width, height]);
 
+    var vis = d3.select("#lineVisu"),
+        chartWidth = 1000,
+        chartHeight = 400;
+    // var bar = d3.select("#barVisu");
+   
+    var margin = {top: 20, right: 20, bottom: 20, left: 50},
+        barWidth = chartWidth - margin.left - margin.right,
+        barHeight = chartHeight - margin.top - margin.bottom;
+        
     //init lots of array node to store VCs' name
     var tempData = [],
         nodes = [],
@@ -65,16 +48,6 @@
 
     var allCombinations = [];
     var roundFreqData = [];
-
-    var vis = d3.select("#visualisation"),
-        width = 1000,
-        height = 500,
-        margins = {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 50
-        };
 
     var filterCombinations = [];
 
@@ -88,7 +61,6 @@
         console.log(error);
       }else{
         // save the data load from json into $scope.getData
-        // console.log(data);
         $scope.getData = data.filter(function(d){
           return d.number!="0";
         });
@@ -104,7 +76,6 @@
 
 
         $scope.combinations = allCombinations;
-        // console.log(allCombinations);
 
         var filterDomain = d3.nest().key(function(d){
           return d.domain;
@@ -157,8 +128,8 @@
         drawForce(edges,nodes);         
             
     }
+
     $scope.updateCombination = function(){
-      // console.log($scope.selectDomain);
       updateBar();
       d3.selectAll(".frequencyLine").attr("stroke","rgba(0,0,0,0.4")
       d3.select("#"+$scope.selectDomain).attr("stroke","red");
@@ -178,7 +149,7 @@
             tempData.push(tempObj);
           }
         });
-
+        var tempCom = [];
         tempData.forEach(function(d){
           var tempObj ={
             "name":d.name
@@ -192,7 +163,13 @@
             "combinations": d.combinations
           }
           combinationGetter.push(tempObj3);
+          d.combinations.forEach(function(com){
+            tempCom.push(com);
+          })
         });
+        $scope.combinations= tempCom;
+
+        // $scope.$apply();
     }
 
     function drawForce(edges,nodes){
@@ -317,8 +294,24 @@
     }
 
 function drawBar(data){
-  d3.selectAll(".bar").remove();
-  d3.selectAll(".axis").remove();
+    var bar = d3.select("#barVisu").append("g")
+        .attr("width", barWidth + margin.left + margin.right)
+        .attr("height", barHeight + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", 
+              "translate(" + margin.left + "," + margin.top + ")");
+    var x = d3.scale.ordinal().rangeRoundBands([0, barWidth], .05);
+    var y = d3.scale.linear().range([barHeight, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(10);
+ 
   x.domain(data.map(function(d) { 
     return d.roundName;
   }));
@@ -327,12 +320,12 @@ function drawBar(data){
     return d.frequency;
   })]);
 
-  svgBar.append("g")
+  bar.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + barHeight + ")")
       .call(xAxis);
 
-  svgBar.append("g")
+  bar.append("g")
       .attr("class", "y axis")
       .call(yAxis)
       .append("text")
@@ -343,7 +336,7 @@ function drawBar(data){
       .style("text-anchor", "end")
       .text("Frequency");
 
-  svgBar.selectAll(".bar")
+  bar.selectAll(".bar")
       .data(data)
       .enter().append("rect")
       .attr("class", "bar")
@@ -389,7 +382,6 @@ function getFreq(data){
     category[data[i].round]++;
   }
 
-
   for(key in category){
     var tempObj={
       "roundName":key,
@@ -401,16 +393,14 @@ function getFreq(data){
 }
 
 function updateBar(){
+  document.getElementById("barVisu").innerHTML="";
   d3.selectAll(".bar").remove();
   d3.selectAll(".axis").remove();
   var newCombination = [];
-  // console.log($scope.combinations);
-  // console.log(allCombinations);
   newCombination = $scope.combinations.filter(function(d){
     return d.domain ===$scope.selectDomain;
   });
   roundFreqData=getFreq(newCombination);
-  // console.log(roundFreqData);
   drawBar(roundFreqData);
 }
 
@@ -433,11 +423,11 @@ function drawLine(filterYear,filterDomain){
 
   var domainLength = filterDomain.length;
   var xScale = d3.scale.linear()
-        .range([margins.left, width - margins.right])
+        .range([margin.left, chartWidth - margin.right])
         .domain(d3.extent(year)),
 
       yScale = d3.scale.pow().exponent(.2)
-        .range([height - margins.top, margins.bottom])
+        .range([chartHeight - margin.top, margin.bottom])
         .domain([0,(d3.extent(count)[1]/domainLength)*3]),
 
       xAxis = d3.svg.axis()
@@ -448,12 +438,12 @@ function drawLine(filterYear,filterDomain){
           .orient("left");
 
       vis.append("svg:g")
-          .attr("transform", "translate(0," + (height - margins.bottom) + ")")
+          .attr("transform", "translate(0," + (chartHeight - margin.bottom) + ")")
           .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
           .call(xAxis);
 
       vis.append("svg:g")
-          .attr("transform", "translate(" + (margins.left) + ",0)")
+          .attr("transform", "translate(" + (margin.left) + ",0)")
           .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
           .call(yAxis);
 
@@ -506,8 +496,8 @@ function drawLine(filterYear,filterDomain){
 
 
 function filterVC(){
-  console.log($scope.combinations);
-  document.getElementById('visualisation').innerHTML ="";
+  document.getElementById('lineVisu').innerHTML ="";
+  document.getElementById('barVisu').innerHTML ="";
   filterDomain = d3.nest().key(function(d){
                     return d.domain;
                   }).key(function(d){
@@ -518,7 +508,7 @@ function filterVC(){
           return d.year;
         }).entries( $scope.combinations);
 
-        drawLine(filterYear,filterDomain);
+  drawLine(filterYear,filterDomain);
 }
 
   }]);

@@ -26,7 +26,6 @@
         <div class="col-7" id="bubbles">
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
         </div>
-
         <div class="col-5" id="firms">
         	<ul class="firmTitle" ng-if="combinations">
         		<li>
@@ -64,11 +63,13 @@
         </div>
         <div class="col-12">
           <div id="lineChart">
-            <svg id="visualisation" width="1000" height="600"></svg>
+            <svg id="lineVisu" width="700" height="400"></svg>
           </div>
         </div>
         <div class="col-12">
-          <div id="barChart"></div>
+          <div id="barChart">
+            <svg id="barVisu" width="700" height="400"></svg>
+          </div>
         </div>
       </div>
     </section>
