@@ -19,6 +19,7 @@
       <div class="col-10 col-offset-1">
         <div class="header">
           <h1>创投行业关系及布局分析</h1>
+          <p id="intro1">数据来源:<a href="https://www.itjuzi.com/">IT桔子</a>&nbsp&nbsp数据截止2016.4.23</p>
         </div>
       </div>
     </div>
@@ -26,7 +27,9 @@
       <div class="row">
         
         <div class="col-6" id="bubbles">
+          <h1 class="colorYellow tipName">投资总次数大于{{threshold}}</h1>
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
+          <h1 class="colorYellow tipName">{{vcName}}</h1>
         </div>
         <div class="col-6" id="firms">
           <div class="guide" ng-if="!flag">
@@ -63,7 +66,8 @@
     <section>
       <div class="row">
         <div class="col-12">
-          <select name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
+          <h1 class="colorYellow">{{vcName}}<span id="trend">投资趋势变化</span></h1>
+          <select class="my-select" name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
             <option value="all">全部领域</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
           </select>

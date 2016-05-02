@@ -11,7 +11,7 @@
 
     // var width =document.getElementById("bubbles").offsetWidth;
     var width=700;
-    var height = 600;
+    var height = 400;
 
 
     var svg = d3.select("#bubbles")
@@ -219,6 +219,7 @@
               .call(force.drag)
               .on("click", function(d){
                 $scope.flag=true;
+                $scope.vcName = d.name;
                 $scope.combinations = combinationGetter[d.index].combinations;
                 $scope.$apply();
                // not finshed yet
@@ -457,7 +458,7 @@ function drawLine(filterYear,filterDomain){
 
       yScale = d3.scale.pow().exponent(.2)
         .range([chartHeight - margin.top, margin.bottom])
-        .domain([0,(d3.extent(count)[1])/domainLength*2]),
+        .domain([0,(d3.extent(count)[1])/domainLength*2.5]),
 
       xAxis = d3.svg.axis()
         .scale(xScale),
@@ -470,13 +471,27 @@ function drawLine(filterYear,filterDomain){
           .attr("class","line")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + (chartHeight - margin.bottom) + ")")
-          .call(xAxis);
+          .call(xAxis)
+          .append("text")
+          .attr("class","year")
+          .attr("x", 980)
+          .attr("y", -15)
+          .attr("dx", ".71em")
+          .style("text-anchor", "end")
+          .text("单位/年");
 
       vis.append("svg:g")
           .attr("class","line")
           .attr("class", "y axis")
           .attr("transform", "translate(" + (margin.left) + ",0)")
-          .call(yAxis);
+          .call(yAxis)
+          .append("text")
+          .attr("class","frequency")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("次数");
 
      var lineGen = d3.svg.line()
           .interpolate("basis")

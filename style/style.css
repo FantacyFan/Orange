@@ -17,7 +17,7 @@ svg {
   height: 150px;
   clear:both;
   background: #466368;
-  background: linear-gradient(#293f50,#009B74);
+  background: linear-gradient(to bottom, #5C7384 10%, #293f50);
 } 
 
 .colorYellow{
@@ -268,6 +268,11 @@ input[type="range"]::-webkit-slider-thumb {
 
 .author p, .support p{
   font-weight: 400;
+}
+
+.author p a, .support p a{
+  text-decoration: none;
+  color:rgba(245,225,96,1);
 }
 
 .copyright{
