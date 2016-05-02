@@ -4,7 +4,7 @@
   myApp.controller('myCtrl', ['$scope',function($scope) {
   	$scope.threshold=80;
     $scope.selectOption =[];
-    $scope.selectDomain="all";
+    $scope.selectDomain="全部领域";
     $scope.getData =[];
     $scope.barData =[];
     $scope.flag=false;

@@ -12,7 +12,9 @@
 </head>
 
 <body ng-controller="myCtrl">
+
   <div class="container">
+    <div id="wrap">
     <div class="row">
       <div class="col-10 col-offset-1">
         <div class="header">
@@ -27,8 +29,8 @@
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
         </div>
         <div class="col-6" id="firms">
-          <div ng-if="!flag">
-            <img src="img/1.jpg" alt="">
+          <div class="guide" ng-if="!flag">
+            <p>点击左侧公司气泡查看详细投资信息</p>
           </div>
           <div ng-if="flag">
         	<ul class="firmTitle" ng-if="combinations">
@@ -62,7 +64,7 @@
       <div class="row">
         <div class="col-12">
           <select name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
-            <option value="all">All</option>
+            <option value="all">全部领域</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
           </select>
 
@@ -73,7 +75,8 @@
               <svg id="lineVisu" width="1000" height="400"></svg>
             </div>
         </div>
-        </div>
+      </div>
+      <div class="row">
         <div class="col-12">
           <div id="barChart">
             <svg id="barVisu" width="1000" height="400"></svg>
@@ -81,8 +84,34 @@
         </div>
       </div>
     </section>
+  </div>
+
+
+  <div id="footer">
+      <div class="row">
+          <div class="author col-6">
+            <p>Created By <span><a href="https://www.linkedin.com/in/benran-fan-95a17978?authType=NAME_SEARCH&authToken=ZtAJ&locale=en_US&srchid=2751214301462161709750&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A2751214301462161709750%2CVSRPtargetId%3A275121430%2CVSRPcmpt%3Aprimary%2CVSRPnm%3Atrue%2CauthType%3ANAME_SEARCH">Benran Fan</a></span> & <a href="#">Yanpu Wu</a></p>
+            <p>bf295@cornell.edu & yw753@cornell.edu</p>
+          </div>
+        <div class="support col-6">
+            <p>Crawler Supported By <span><a href="https://www.linkedin.com/in/wenying45?authType=NAME_SEARCH&authToken=en0K&locale=en_US&trk=tyah&trkInfo=clickedVertical%3Amynetwork%2CclickedEntityId%3A358687678%2CauthType%3ANAME_SEARCH%2Cidx%3A1-1-1%2CtarId%3A1462161768772%2Ctas%3Aying%20wen">Ying Wen</a></span></p>
+            <p>ying.wen@cs.ucl.ac.uk</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="copyright col-12">
+          <h5>© 2016 BENRAN FAN & YANPU WU</h5>
+        </div>
+      </div>
+  </div>
+
+
 
   </div>
+
+
+
+
 </body>
 
 </html>
