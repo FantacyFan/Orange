@@ -16,10 +16,10 @@ svg {
 
 #footer {position: relative;
   margin-top: -150px; /* negative value of footer height */
+  margin-bottom: 20px;
   height: 150px;
   clear:both;
-  background: #466368;
-  background: linear-gradient(to bottom, #5C7384 10%, #293f50);
+  background: #2A2B35;
 } 
 
 .colorYellow{
