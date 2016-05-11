@@ -74,7 +74,7 @@
       <div class="row">
         <div class="col-12">
           <h1 class="trend">各<span class="yellowTrend">领域</span>投资次数变化趋势</h1>
-          <h1 id="intro2"><span id="yellow5">{{vcName}}</span>在<span id="yellow6">{{selectDomain}}</span>领域投资次数变化</h1>
+          <h1 id="intro2"><span id="yellow5">{{vcName}}</span>在<span id="yellow6">{{selectDomain}}</span>领域投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</h1>
           <select class="my-select" name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
             <option value="全部">全部</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
@@ -91,7 +91,7 @@
       <div class="row">
         <div class="col-12">
           <h1 class="trend">各<span class="yellowTrend">轮次</span>投资次数变化趋势</h1>
-          <h1 id="intro3"><span id="yellow7">{{vcName}}</span>在<span id="yellow8">{{selectDomain}}</span>各轮次投资次数变化</h1>
+          <h1 id="intro3"><span id="yellow7">{{vcName}}</span>在<span id="yellow8">{{selectDomain}}</span>各轮次投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</h1>            
           <div id="barChart">
             <svg id="barVisu" width="1000" height="400"></svg>
           </div>

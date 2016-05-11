@@ -2,13 +2,15 @@
   var myApp = angular.module('myApp', []);
 
   myApp.controller('myCtrl', ['$scope',function($scope) {
-  	$scope.threshold=80;
+  	$scope.threshold=50;
     $scope.selectOption =[];
     $scope.vcName="全部投资方"
     $scope.selectDomain="全部领域";
     $scope.getData =[];
     $scope.barData =[];
     $scope.flag=false;
+    $scope.startYear="1999";
+    $scope.endYear="2016";
 
     // var width =document.getElementById("bubbles").offsetWidth;
     var width=700;
@@ -450,16 +452,18 @@ function drawLine(filterYear,filterDomain){
     year.push(Number(d.key));
     count.push(num);
   });  
-
+  $scope.startYear=d3.extent(year)[0];
+  $scope.endYear=d3.extent(year)[1];
+  // console.log($scope.startYear);
   var domainLength = filterDomain.length;
   // console.log(d3.extent(count));
   var xScale = d3.scale.linear()
         .range([margin.left, chartWidth - margin.right])
         .domain(d3.extent(year)),
 
-      yScale = d3.scale.pow().exponent(.2)
+      yScale = d3.scale.pow().exponent(.4)
         .range([chartHeight - margin.top, margin.bottom])
-        .domain([0,(d3.extent(count)[1])/domainLength*2.5]),
+        .domain([0,(d3.extent(count)[1])/domainLength*2.8]),
 
       xAxis = d3.svg.axis()
         .scale(xScale),
@@ -558,6 +562,7 @@ function filterVC(){
         }).entries($scope.combinations);
 
   drawLine(filterYear,filterDomain);
+  $scope.$apply();
 }
 
   }]);
