@@ -17,9 +17,9 @@
 
 			var colors=['#1EFEC5','#F2CE62','#A7F272','#81CFFB','#F76661'];
 			var particles=[];
-			var offset=7;
+			var offset=5;
 			var fontBase = W,                   
-   				fontSize = 180;
+   				fontSize = 70;
 
 			function getPosition(){
 				c2.width = landpage.clientWidth;
@@ -28,7 +28,7 @@
 				ctx2.fillStyle = "#000000";
                 ctx2.textAlign='center';
 				ctx2.font=getFont();
-				ctx2.fillText("Footer啥jb玩意", W/2, H/1.5);
+				ctx2.fillText("创投行业关系及布局分析", W/2, H/2.5);
 
 				imageData = ctx2.getImageData(0, 0, W, H);
 				

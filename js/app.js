@@ -4,6 +4,7 @@
   myApp.controller('myCtrl', ['$scope',function($scope) {
   	$scope.threshold=80;
     $scope.selectOption =[];
+    $scope.vcName="全部投资方"
     $scope.selectDomain="全部领域";
     $scope.getData =[];
     $scope.barData =[];

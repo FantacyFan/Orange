@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style/Grid.css">
 <script type="text/javascript" src="js/angular.min.js" ></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="js/text.js"></script>
+<!-- <script src="js/text.js"></script> -->
 <script src="js/app.js"></script>
 
 </head>
@@ -16,9 +16,9 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-12" id="landpage">
+      <!-- <div class="col-12" id="landpage">
         <canvas id="c"></canvas>
-      </div>
+      </div> -->
     </div>
     <div id="wrap">
     <div class="row">
@@ -33,13 +33,14 @@
       <div class="row">
         
         <div class="col-6" id="bubbles">
-          <h1 class="colorYellow tipName">投资总次数大于{{threshold}}</h1>
+          <h1 class="colorYellow tipName">投资次数大于{{threshold}}</h1>
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
           <h1 class="colorYellow tipName">{{vcName}}</h1>
         </div>
         <div class="col-6" id="firms">
           <div class="guide" ng-if="!flag">
-            <p>点击左侧公司气泡查看详细投资信息</p>
+            <p>数据分析包括各投资方投资<span id="yellow1">次数</span>及<span id="yellow2">共同投资</span>关系，通过网络拓扑图连接，表示各投资方之间<span id="yellow3">相互关系</span></p>
+            <p>点击左侧公司<span id="yellow4">气泡</span>查看详细投资信息</p>
           </div>
           <div ng-if="flag">
         	<ul class="firmTitle" ng-if="combinations">
@@ -72,15 +73,16 @@
     <section>
       <div class="row">
         <div class="col-12">
-          <h1 class="colorYellow">{{vcName}}<span id="trend">投资趋势变化</span></h1>
+          <h1 class="trend">各<span class="yellowTrend">领域</span>投资次数变化趋势</h1>
+          <h1 id="intro2"><span id="yellow5">{{vcName}}</span>在<span id="yellow6">{{selectDomain}}</span>领域投资次数变化</h1>
           <select class="my-select" name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
-            <option value="all">全部领域</option>
+            <option value="全部">全部</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
           </select>
 
         </div>
         <div class="col-12">
-            <h1 id="selection">{{selectDomain}}</h1>
+            <h1 id="selection"></h1>
             <div id="lineChart">
               <svg id="lineVisu" width="1000" height="400"></svg>
             </div>
@@ -88,6 +90,8 @@
       </div>
       <div class="row">
         <div class="col-12">
+          <h1 class="trend">各<span class="yellowTrend">轮次</span>投资次数变化趋势</h1>
+          <h1 id="intro3"><span id="yellow7">{{vcName}}</span>在<span id="yellow8">{{selectDomain}}</span>各轮次投资次数变化</h1>
           <div id="barChart">
             <svg id="barVisu" width="1000" height="400"></svg>
           </div>
