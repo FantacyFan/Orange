@@ -5,6 +5,10 @@ body{
 ul, li {
   list-style: none; }
 
+section{
+  margin-bottom: 50px;
+}
+
 svg {
   display: block; }
 #landpage{
@@ -15,7 +19,7 @@ svg {
 }
 
 #footer {position: relative;
-  margin-top: -130px; /* negative value of footer height */
+
   clear:both;
   background: #26333D;
 } 
@@ -41,7 +45,8 @@ svg {
 .header h1 {
   font-size: 1.8em;
   color: #03f2b4;
-  margin: 30px 0px; }
+  margin-top: 50px;
+  margin-bottom:30px; }
 
 #intro1{
   margin-bottom: 10px;
@@ -123,11 +128,11 @@ input[type="range"]::-webkit-slider-thumb {
 #firms {
   height: 400px;
   padding: 0 40px;
-  overflow: scroll; }
-  #firms ul li {
+}
+#firms ul li {
     text-align: left; 
     line-height: 1.5em;
-  }
+}
     #firms ul li span {
       font-size: 0.7em;
       display: inline-block;
@@ -314,5 +319,5 @@ input[type="range"]::-webkit-slider-thumb {
 
 .copyright h5{
   font-weight: 400;
-  padding: 15px;
+  padding-bottom: 50px;
 }
