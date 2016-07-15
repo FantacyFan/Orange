@@ -13,8 +13,8 @@
     $scope.endYear="2016";
 
     // var width =document.getElementById("bubbles").offsetWidth;
-    var width=700;
-    var height = 400;
+    var width=610;
+    var height = 440;
 
 
     var svg = d3.select("#bubbles")
@@ -144,7 +144,7 @@
     $scope.updateCombination = function(){
       updateBar();
       d3.selectAll(".frequencyLine").attr("stroke","rgba(19,198,254,0.2)")
-      d3.select("#"+$scope.selectDomain).attr("stroke","rgba(245,225,96,1)");
+      d3.select("#"+$scope.selectDomain).attr("stroke","#f1b92f");
     }  
 
     function updateData(){
@@ -196,7 +196,7 @@
             .attr("class", "link")
             .style("stroke",
               // "rgba(218,212,162,0.1)"
-              "rgba(231,231,231,0.1)"
+              "rgba(231,231,231,0.2)"
             )
             .style("stroke-width", function(d) { 
               return Math.sqrt(d.value);
@@ -211,13 +211,13 @@
                 return  Math.sqrt(numGetter[d.index].number);
               })
               .style("fill",
-                "rgba(174, 202, 237, 0.5)"
+                "rgba(93, 158, 239, 0.5)"
               )
               .on("mouseover", function(d) {
-                d3.select(this).style("fill", "rgba(3,242,180,0.8)");
+                d3.select(this).style("fill", "rgba(93, 158, 239, 0.9)");
               }) 
               .on("mouseout", function(d) {
-                d3.select(this).style("fill", "rgba(174, 202, 237, 0.5)");
+                d3.select(this).style("fill", "rgba(93, 158, 239, 0.5)");
               })
               .call(force.drag)
               .on("click", function(d){
@@ -239,7 +239,7 @@
               .append("text")
               .attr("class","vcName")
               .attr("font-size","0.5em")
-              .style("fill", "rgba(183, 217, 255, 0.6)")
+              .style("fill", "rgba(93, 158, 239, 0.5)")
               .attr("dx", 20)
               .attr("dy", 8)
               .text(function(d){
@@ -353,12 +353,12 @@ function drawBar(data){
   bar.selectAll(".bar")
       .data(data)
       .enter().append("rect")
-      .attr("class", "bar").attr("fill","#03f2b4")
+      .attr("class", "bar").attr("fill","#7fd88b")
       .on("mouseover", function(d) {
-                d3.select(this).style("fill", "#fef161");
+                d3.select(this).style("fill", "#f1b92f");
               }) 
       .on("mouseout", function(d) {
-        d3.select(this).style("fill", "#03f2b4");
+        d3.select(this).style("fill", "#7fd88b");
       })
       .attr("x", function(d) { 
         return x(d.roundName); 
@@ -511,8 +511,8 @@ function drawLine(filterYear,filterDomain){
       vis.append('svg:path')
           .attr("class","all")
           .attr('d', lineGen(currentYear))
-          .attr('stroke', 'rgba(94,225,142,1)')
-          .attr('stroke-width', 2.5)
+          .attr('stroke', '#f76661')
+          .attr('stroke-width', 4)
           .attr('fill', 'none');
 
 
@@ -537,7 +537,7 @@ function drawLine(filterYear,filterDomain){
             .attr('stroke-width', 2.5)
             .attr('fill', 'none')
             .on("mouseover",function(){
-              d3.select(this).attr("stroke","rgba(245,225,96,1)");
+              d3.select(this).attr("stroke","#f1b92f");
             })
             .on("mouseout", function(){
               d3.select(this).attr('stroke', 'rgba(19,198,254,0.2)');

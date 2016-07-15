@@ -20,27 +20,25 @@
         <canvas id="c"></canvas>
       </div> -->
     </div>
-
-    <div class="row">
+    <div id = "header" class="row ">
       <div class="col-10 col-offset-1">
         <div class="header">
           <h1>创投行业关系及布局分析</h1>
-          <p id="intro1">数据来源:<a href="https://www.itjuzi.com/">IT桔子</a>&nbsp&nbsp数据截止2016.4.23</p>
+          <p class="intro">数据来源:<a href="https://www.itjuzi.com/">&nbsp&nbspIT桔子</a>&nbsp&nbsp数据截止2016.4.23</p>
         </div>
       </div>
     </div>
-    <section>
+    <section id="g1">
       <div class="row">
-        
         <div class="col-6" id="bubbles">
-          <h1 class="colorYellow tipName">投资次数大于{{threshold}}</h1>
+          <h1 class=" tipName">投资次数大于{{threshold}}</h1>
           <input id="threshold" type="range" min="20" max="250" step="30" ng-model="threshold"  ng-change="update()">
-          <h1 class="colorYellow tipName">{{vcName}}</h1>
+          <h1 class=" tipName">{{vcName}}</h1>
         </div>
         <div class="col-6" id="firms">
           <div class="guide" ng-if="!flag">
-            <p>数据分析包括各投资方投资<span id="yellow1">次数</span>及<span id="yellow2">共同投资</span>关系，通过网络拓扑图连接，表示各投资方之间<span id="yellow3">相互关系</span></p>
-            <p>点击左侧公司<span id="yellow4">气泡</span>查看详细投资信息</p>
+            <p>数据分析包括各投资方投资<span class="yellow">次数</span>及<span class="yellow">共同投资</span>关系，通过网络拓扑图连接，表示各投资方之间<span class="yellow">相互关系</span></p>
+            <p>点击左侧公司<span class="yellow">气泡</span>查看详细投资信息</p>
           </div>
           <div ng-if="flag">
         	<ul class="firmTitle" ng-if="combinations">
@@ -65,16 +63,13 @@
           </ul>
           </div>
         </div>
-
       </div>
     </section>
-
-
-    <section>
+    <section id="g2">
       <div class="row">
         <div class="col-12">
           <h1 class="trend">各<span class="yellowTrend">领域</span>投资次数变化趋势</h1>
-          <h1 id="intro2"><span id="yellow5">{{vcName}}</span>在<span id="yellow6">{{selectDomain}}</span>领域投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</h1>
+          <p class="intro"><span id="yellow5">{{vcName}}</span>在<span id="yellow6">{{selectDomain}}</span>领域投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</p>
           <select class="my-select" name="domainSelect" id="domainSelect"  ng-model="selectDomain" ng-change="updateCombination()">
             <option value="全部">全部</option>
             <option ng-repeat="option in selectOption" value="{{option.name}}">{{option.name}}</option>
@@ -88,43 +83,36 @@
             </div>
         </div>
       </div>
+    </section>
+    <section id="g3">
       <div class="row">
         <div class="col-12">
           <h1 class="trend">各<span class="yellowTrend">轮次</span>投资次数变化趋势</h1>
-          <h1 id="intro3"><span id="yellow7">{{vcName}}</span>在<span id="yellow8">{{selectDomain}}</span>各轮次投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</h1>            
+          <p class="intro"><span id="yellow7">{{vcName}}</span>在<span id="yellow8">{{selectDomain}}</span>各轮次投资次数变化 (<span>{{startYear}}</span> - <span>{{endYear}}</span>)</p>            
           <div id="barChart">
             <svg id="barVisu" width="1000" height="400"></svg>
           </div>
         </div>
       </div>
     </section>
-
-
-  <div id="footer">
-      <div class="row">
-          <div class="author col-6">
-            <p>Created By <span><a href="https://www.linkedin.com/in/benran-fan-95a17978?authType=NAME_SEARCH&authToken=ZtAJ&locale=en_US&srchid=2751214301462161709750&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A2751214301462161709750%2CVSRPtargetId%3A275121430%2CVSRPcmpt%3Aprimary%2CVSRPnm%3Atrue%2CauthType%3ANAME_SEARCH">Benran Fan</a></span> & <a href="http://www.wuyue54.com/">Yanpu Wu</a></p>
-            <p>bf295@cornell.edu & yw753@cornell.edu</p>
+    <section id="footer">
+        <div class="row">
+            <div class="author col-6">
+              <p>Created By <span><a href="https://www.linkedin.com/in/benran-fan-95a17978?authType=NAME_SEARCH&authToken=ZtAJ&locale=en_US&srchid=2751214301462161709750&srchindex=1&srchtotal=1&trk=vsrp_people_res_name&trkInfo=VSRPsearchId%3A2751214301462161709750%2CVSRPtargetId%3A275121430%2CVSRPcmpt%3Aprimary%2CVSRPnm%3Atrue%2CauthType%3ANAME_SEARCH">Benran Fan</a></span> & <a href="http://www.wuyue54.com/">Yanpu Wu</a></p>
+              <p>bf295@cornell.edu & yw753@cornell.edu</p>
+            </div>
+          <div class="support col-6">
+              <p>Crawler Supported By <span><a href="https://www.linkedin.com/in/wenying45?authType=NAME_SEARCH&authToken=en0K&locale=en_US&trk=tyah&trkInfo=clickedVertical%3Amynetwork%2CclickedEntityId%3A358687678%2CauthType%3ANAME_SEARCH%2Cidx%3A1-1-1%2CtarId%3A1462161768772%2Ctas%3Aying%20wen">Ying Wen</a></span></p>
+              <p>ying.wen@cs.ucl.ac.uk</p>
           </div>
-        <div class="support col-6">
-            <p>Crawler Supported By <span><a href="https://www.linkedin.com/in/wenying45?authType=NAME_SEARCH&authToken=en0K&locale=en_US&trk=tyah&trkInfo=clickedVertical%3Amynetwork%2CclickedEntityId%3A358687678%2CauthType%3ANAME_SEARCH%2Cidx%3A1-1-1%2CtarId%3A1462161768772%2Ctas%3Aying%20wen">Ying Wen</a></span></p>
-            <p>ying.wen@cs.ucl.ac.uk</p>
         </div>
-      </div>
-      <div class="row">
-        <div class="copyright col-12">
-          <h5>© 2016 BENRAN FAN & YANPU WU</h5>
+        <div class="row">
+          <div class="copyright col-12">
+            <h5>© 2016 BENRAN FAN & YANPU WU</h5>
+          </div>
         </div>
-      </div>
+    </section>
   </div>
-
-
-
-  </div>
-
-
-
-
 </body>
 
 </html>

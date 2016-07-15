@@ -1,12 +1,16 @@
 body{
   background-color: #202B33;
+  color:#353e40;
+}
+h1{
+  color:#353e40;
 }
 
 ul, li {
   list-style: none; }
 
 section{
-  margin-bottom: 50px;
+  background-color: #f8f8f8;
 }
 
 svg {
@@ -21,7 +25,7 @@ svg {
 #footer {position: relative;
 
   clear:both;
-  background: #26333D;
+  background: #393939;
 } 
 
 .colorYellow{
@@ -38,39 +42,41 @@ svg {
   left: 10;
   top: 10; }
 
+#header{
+  background-color: #f8f8f8;
+}
 .header{
   margin-bottom: 50px;
 }
 
 .header h1 {
   font-size: 1.8em;
-  color: #03f2b4;
+  /*color: #03f2b4;*/
+  color:#353e40;
   margin-top: 50px;
   margin-bottom:30px; }
 
-#intro1{
-  margin-bottom: 10px;
-  color:rgba(3,242,180,1);
+.intro{
+  color:#5f6b6f;
   font-size: 1em;
 }
 
-#intro1 a{
-  color: #fef161;
+.intro a{
+  color: #f1b92f;
   font-size: 1.4em;
 }
 
-#intro2{
-  margin-bottom: 10px;
-  color:rgba(3,242,180,1);
-  font-size: 1em;
-  line-height: 50px;
+#g1, #g3{
+  background: #FFF;
 }
 
-#intro3{
-  margin-bottom: 10px;
-  color:rgba(3,242,180,1);
-  font-size: 1em;
-  line-height: 50px;
+#g2, #g3{
+  padding-bottom: 50px;
+}
+
+#bubbles{
+  background-color: #FFF;
+  padding: 0 40px ;
 }
 
 #threshold{
@@ -81,7 +87,7 @@ input[type="range"] {
   -webkit-appearance: none;
 
   height: 2px;
-  background: #0edaa9;
+  background: #7fd88b;
   background-position: center;
   background-repeat: no-repeat;
   margin: auto;
@@ -94,18 +100,18 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 100%;
   background: #f9f9f9;
   position: relative;
-  border: 3px solid #0edaa9;
+  border: 3px solid #7fd88b;
   z-index: 3;
   cursor: pointer;
 }
 
 .guide{
-  position: relative;
-  top: 50%;
-  width: 70%;
-  margin: 0 auto;
+  display: inline-block;
+  margin-top: 231px;
+  width: 80%;
+  /*margin: 0 auto;*/
   transform: translateY(-50%);
-  color:rgba(3,242,180,1);
+  color:rgb(75, 191, 91);
   font-size: 1.0em;
 }
 
@@ -113,7 +119,7 @@ input[type="range"]::-webkit-slider-thumb {
   line-height: 30px;
 }
 
-#yellow1, #yellow2, #yellow3, #yellow4, #yellow5, #yellow6, #yellow7, #yellow8{
+.yellow{
   color: rgba(245,225,96,1);
   font-size: 1.2em;
   padding: 0 5px;
@@ -126,8 +132,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 #firms {
-  height: 400px;
-  padding: 0 40px;
+  height: 532px;
+  padding: 20px 40px;
 }
 #firms ul li {
     text-align: left; 
@@ -142,28 +148,26 @@ input[type="range"]::-webkit-slider-thumb {
     }
 
 .firmList {
-  height: 500px;
-  overflow: scroll; }
+  height: 462px;
+  overflow: scroll; 
+  overflow-x: hidden;}
   .firmList li {
-    color: rgba(174, 202, 237,0.5); }
+    color: #5f6b6f; }
     .firmList li:hover {
-      background-color: rgba(3,242,180,0.7);
-      color: white; }
+      cursor: default;
+      background-color: #f2f5f6;
+      }
 
 .firmTitle li{
   font-size: 1.2em;
-  color:rgb(174, 202, 237);
+  color: #353e40;
 }
-#selection{
-  color:rgba(245,225,96,1);
-  margin-top:1em;
-}
+
 
 .trend{
   font-size: 1.4em;
-  color:rgba(3,242,180,0.9);
-  padding: 20px;
   margin-top: 50px;
+  margin-bottom: 30px;
 }
 
 .yellowTrend{
@@ -205,35 +209,31 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 
-  .x.axis line, .x.axis path {
+  .x.axis line, .x.axis path,  .y.axis line, .y.axis path {
      fill: none;
-     stroke: rgba(174, 202, 237, 0.1);
-     stroke-width: 2;
+     stroke: #a5c8f0;
+     stroke-width: 4;
   }
-     
-  .y.axis line, .y.axis path {
-     fill: none;
-     stroke: rgba(174, 202, 237, 0.1);
-     stroke-width: 2;
-  }
+    
 
   .x.axis text, .y.axis text{
-    fill:rgba(174, 202, 237, 1);
+    fill:#7aafef;
   }
 
 .my-select {
+  margin-top: 30px;
   display: inline;
-  border: 1px solid rgba(3,242,180,0.1);
+  border: 0;
   border-radius: 0.2em;
   padding: 0;
   position: relative;
-  background: rgba(3,242,180,0.5);
+  background: #7fd88b;
   color: #F9F9F9;
-  width: 200px; }
+  width: 200px;
+  cursor: pointer; }
   .my-select:hover {
-    border: 1px solid rgba(3,242,180,0.8);
-    background: rgba(3,242,180,0.8);
-    cursor: pointer; }
+    background: #5bdc6c;
+  }
 
 .my-select select {
   box-sizing: border-box;
@@ -253,7 +253,6 @@ input[type="range"]::-webkit-slider-thumb {
   .my-select select:focus {
     background-color: transparent;
     outline: none;
-    border: 1px solid rgba(3,242,180,0.8);
     box-shadow: 0 0 1px 3px #b4defa; }
 
 .my-select:after {
@@ -299,7 +298,7 @@ input[type="range"]::-webkit-slider-thumb {
  
 
 .author, .support{
-  color:rgba(174, 202, 237, 0.8);
+  color:#d7d7d7;
   padding-top:50px;
 }
 
@@ -319,5 +318,5 @@ input[type="range"]::-webkit-slider-thumb {
 
 .copyright h5{
   font-weight: 400;
-  padding-bottom: 50px;
+  padding-bottom: 40px;
 }
