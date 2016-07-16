@@ -353,12 +353,12 @@ function drawBar(data){
   bar.selectAll(".bar")
       .data(data)
       .enter().append("rect")
-      .attr("class", "bar").attr("fill","#7fd88b")
+      .attr("class", "bar").attr("fill","#1bc1fe")
       .on("mouseover", function(d) {
-                d3.select(this).style("fill", "#f1b92f");
+                d3.select(this).style("fill", "rgb(245,225,96)");
               }) 
       .on("mouseout", function(d) {
-        d3.select(this).style("fill", "#7fd88b");
+        d3.select(this).style("fill", "#1bc1fe");
       })
       .attr("x", function(d) { 
         return x(d.roundName); 
@@ -533,7 +533,7 @@ function drawLine(filterYear,filterDomain){
             })
             .attr("class","frequencyLine")
             .attr('d',lineGen(currentDomain))
-            .attr('stroke', 'rgba(19,198,254,0.2)')
+            .attr('stroke', 'rgba(27,193,254,0.2)')
             .attr('stroke-width', 2.5)
             .attr('fill', 'none')
             .on("mouseover",function(){
